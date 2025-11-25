@@ -1,0 +1,356 @@
+import { useState } from "react";
+import { Phone, Mail, MessageCircle, MapPin, Clock, Zap, Droplet, Navigation } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import lotsHeroImage from "@assets/generated_images/development_street_view.png";
+
+export default function Lots() {
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  const contactMutation = useMutation({
+    mutationFn: async (data: typeof formData) => {
+      return await apiRequest("POST", "/api/contact", data);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Mensaje Enviado",
+        description: "Nos pondremos en contacto contigo pronto.",
+      });
+      setFormData({ name: "", email: "", phone: "", message: "" });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "No se pudo enviar el mensaje. Por favor, intenta de nuevo.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    contactMutation.mutate(formData);
+  };
+
+  const pricingDetails = [
+    { label: "Precio por m²", value: "$60 MXN" },
+    { label: "Tamaño mínimo", value: "500 m²" },
+    { label: "Precio mínimo", value: "$30,000 MXN" },
+    { label: "Abono inicial (20%)", value: "$6,000 MXN" },
+    { label: "Cuota mensual", value: "$200 MXN" },
+    { label: "Tasa de interés", value: "6% anual" },
+  ];
+
+  const services = [
+    { icon: Zap, label: "Luz Eléctrica", description: "Instalación disponible" },
+    { icon: Droplet, label: "Agua Potable", description: "Servicio garantizado" },
+    { icon: Navigation, label: "Calle Pavimentada", description: "En desarrollo" },
+  ];
+
+  const contactMethods = [
+    {
+      icon: Phone,
+      label: "Teléfono",
+      value: "+52 123 456 7890",
+      href: "tel:+521234567890",
+      testId: "link-phone",
+    },
+    {
+      icon: Mail,
+      label: "Correo Electrónico",
+      value: "info@villasdonaolga.com",
+      href: "mailto:info@villasdonaolga.com",
+      testId: "link-email",
+    },
+    {
+      icon: MessageCircle,
+      label: "WhatsApp",
+      value: "Enviar Mensaje",
+      href: "https://wa.me/521234567890",
+      testId: "link-whatsapp",
+    },
+  ];
+
+  return (
+    <div className="min-h-screen">
+      <section
+        className="relative h-[40vh] min-h-[300px] flex items-center justify-center"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${lotsHeroImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-4">
+            Descubre tu Lote Ideal
+          </h1>
+          <p className="text-lg md:text-xl text-white/95">
+            Información detallada sobre precios, financiamiento y servicios
+          </p>
+        </div>
+      </section>
+
+      <section id="financiamiento" className="py-16 md:py-24 bg-accent/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
+              Precios y Financiamiento
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Planes flexibles diseñados para hacer realidad tu inversión
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <Card className="overflow-hidden">
+              <CardHeader className="bg-primary/5">
+                <CardTitle className="text-2xl">Detalles de Precio</CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  {pricingDetails.map((detail, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center py-3 border-b last:border-0"
+                      data-testid={`pricing-${index}`}
+                    >
+                      <span className="text-muted-foreground">
+                        {detail.label}
+                      </span>
+                      <span className="font-semibold text-lg">
+                        {detail.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <CardHeader className="bg-primary/5">
+                <CardTitle className="text-2xl">Servicios Incluidos</CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-6">
+                  {services.map((service, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start gap-4"
+                      data-testid={`service-${index}`}
+                    >
+                      <div className="flex-shrink-0">
+                        <service.icon className="w-10 h-10 text-primary" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-lg mb-1">
+                          {service.label}
+                        </h4>
+                        <p className="text-muted-foreground">
+                          {service.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-6 p-4 bg-muted rounded-md">
+                  <p className="text-sm text-muted-foreground">
+                    <strong>Nota:</strong> Los lotes tienen tamaños flexibles
+                    desde 500m². Consulta disponibilidad específica.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      <section id="contacto" className="py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
+              Contacto
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Estamos aquí para responder todas tus preguntas
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
+            <div className="space-y-6">
+              <h3 className="text-2xl font-semibold mb-6">
+                Información de Contacto
+              </h3>
+
+              {contactMethods.map((method, index) => (
+                <a
+                  key={index}
+                  href={method.href}
+                  target={method.href.startsWith("http") ? "_blank" : undefined}
+                  rel={
+                    method.href.startsWith("http")
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
+                  data-testid={method.testId}
+                >
+                  <Card className="hover-elevate active-elevate-2 transition-all duration-300 cursor-pointer">
+                    <CardContent className="p-6">
+                      <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <method.icon className="h-6 w-6 text-primary" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm text-muted-foreground mb-1">
+                            {method.label}
+                          </p>
+                          <p className="font-semibold truncate">
+                            {method.value}
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </a>
+              ))}
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Clock className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">
+                        Horario de Atención
+                      </p>
+                      <p className="font-semibold">Lunes a Viernes</p>
+                      <p className="text-muted-foreground">9:00 AM - 6:00 PM</p>
+                      <p className="font-semibold mt-2">Sábados</p>
+                      <p className="text-muted-foreground">10:00 AM - 2:00 PM</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <MapPin className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">
+                        Ubicación
+                      </p>
+                      <p className="font-semibold">Villas Doña Olga</p>
+                      <p className="text-muted-foreground">
+                        Desarrollo Residencial
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-2xl">Envíanos un Mensaje</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Nombre Completo *</Label>
+                      <Input
+                        id="name"
+                        required
+                        value={formData.name}
+                        onChange={(e) =>
+                          setFormData({ ...formData, name: e.target.value })
+                        }
+                        placeholder="Tu nombre"
+                        data-testid="input-name"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Correo Electrónico *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) =>
+                          setFormData({ ...formData, email: e.target.value })
+                        }
+                        placeholder="tu@email.com"
+                        data-testid="input-email"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">Teléfono</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) =>
+                          setFormData({ ...formData, phone: e.target.value })
+                        }
+                        placeholder="+52 123 456 7890"
+                        data-testid="input-phone"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="message">Mensaje *</Label>
+                      <Textarea
+                        id="message"
+                        required
+                        value={formData.message}
+                        onChange={(e) =>
+                          setFormData({ ...formData, message: e.target.value })
+                        }
+                        placeholder="¿En qué podemos ayudarte?"
+                        rows={5}
+                        data-testid="input-message"
+                      />
+                    </div>
+
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      size="lg"
+                      disabled={contactMutation.isPending}
+                      data-testid="button-submit-contact"
+                    >
+                      {contactMutation.isPending ? "Enviando..." : "Enviar Mensaje"}
+                    </Button>
+
+                    <p className="text-xs text-muted-foreground text-center">
+                      * Al enviar este formulario, nos pondremos en contacto
+                      contigo a la brevedad posible.
+                    </p>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

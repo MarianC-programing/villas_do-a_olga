@@ -1,0 +1,79 @@
+Eres un experto desarrollador web con enfoque en sitios promocionales de bienes raíces. Necesito que generes el código para un sitio web estático y responsivo, centrado en la venta de lotes residenciales. El sitio debe ser moderno, limpio, fácil de navegar y optimizado para mostrar información clave y facilitar el contacto.
+
+**Nombre del Proyecto:** Villas Doña Olga - Venta de Lotes
+
+**Logo:** (Referencia a la imagen provista: un logo circular con el texto "Villas Doña Olga" y un paisaje de colinas y casas estilo campestre)
+
+**Colores Inspiración:** Tonos verdes, tierra, crema/beige del logo. Usa una paleta de colores complementaria que transmita naturaleza, tranquilidad y exclusividad.
+
+---
+
+**Estructura de Páginas (Mínimo):**
+
+1.  **Inicio (index.html):**
+    * **Encabezado (Hero Section):**
+        * Título grande: "Construye tu Futuro en Villas Doña Olga"
+        * Subtítulo/Slogan: "Lotes Exclusivos con Financiamiento Directo"
+        * Botón claro de "Ver Lotes Ahora" (que enlace a la página de Lotes).
+        * Imagen de fondo atractiva (paisaje campestre, naturaleza, villas).
+    * **Sección "Nuestra Oferta":**
+        * Iconos o pequeñas cajas destacando los beneficios clave:
+            * "Precios Competitivos" ($60/m²)
+            * "Financiamiento Flexible" (20% abono, $200/mes)
+            * "Servicios Incluidos" (Luz, Agua, Calle)
+        * Breve descripción de lo que se ofrece.
+    * **Sección "Plano General del Proyecto":**
+        * Espacio para insertar una imagen del plano de los lotes (con los lotes vendidos/no disponibles marcados).
+        * Botón para "Ver Disponibilidad Detallada" (que enlace a la página de Lotes).
+    * **Call to Action Final:** Un mensaje invitando a contactar con un botón "Contáctanos".
+
+2.  **Lotes y Contacto (lotes.html o contacto.html con secciones):**
+    * **Título:** "Descubre tu Lote Ideal"
+    * **Detalles de Precios y Financiamiento:**
+        * Claramente listado: Precio por m² ($60), Mínimo 500m², Precio mínimo ($30,000), Abono (20% / $6,000), Cuota mensual ($200), Interés (6% anual).
+        * Destacar la flexibilidad en el tamaño de los lotes.
+    * **Información de Servicios:** Detallar que incluye luz, agua y calle (con mención de que la calle está en desarrollo).
+    * **Sección de Contacto:**
+        * Formulario de contacto básico (Nombre, Email, Teléfono, Mensaje) - *Si la IA no puede generar backend, que sea un formulario estático con un mensaje de "Se requiere backend para envío" o una sugerencia de `mailto:`. Mejor aún, usar solo los datos de contacto directos.*
+        * **Datos de Contacto Directos:**
+            * Teléfono: `[Tu Número Aquí]` (con enlace `tel:`)
+            * Correo Electrónico: `[Tu Email Aquí]` (con enlace `mailto:`)
+            * WhatsApp: `[Enlace Directo a WhatsApp Aquí]` (`https://wa.me/tunumerotelefonico`)
+        * Horario de Atención.
+    * **Ubicación (Opcional):** Espacio para un mapa incrustado de Google Maps (si se tiene la dirección exacta).
+
+---
+
+**Elementos Comunes (Header y Footer):**
+
+* **Header:**
+    * Logo de "Villas Doña Olga" (a la izquierda).
+    * Menú de navegación (derecha) con enlaces a: Inicio, Lotes Disponibles, Financiamiento, Contacto (pueden ser secciones dentro de una misma página si el sitio es "one-page").
+* **Footer:**
+    * Copyright: "© [Año Actual] Villas Doña Olga. Todos los derechos reservados."
+    * Enlaces a redes sociales (si aplica).
+    * Breve descripción o misión.
+
+---
+
+**Requerimientos Técnicos y Estilo:**
+
+* **HTML5 Semántico:** Uso correcto de etiquetas `header`, `nav`, `main`, `section`, `article`, `aside`, `footer`.
+* **CSS3 Moderno:**
+    * **Diseño Responsivo:** Usar Flexbox o CSS Grid, y Media Queries para asegurar que el sitio se vea bien en móviles, tablets y escritorios.
+    * **Fuentes:** Elegir fuentes legibles y que transmitan una sensación de hogar/naturaleza (ej. una sans-serif limpia para texto general y una serif o script para títulos si combina con el logo).
+    * **Animaciones Sutiles:** Pequeñas transiciones o efectos hover en botones y enlaces para mejorar la experiencia.
+    * **Paleta de Colores:** Basarse en los colores del logo (verde oscuro, tierra, crema) con acentos cálidos y un fondo claro.
+* **JavaScript (Mínimo Necesario):**
+    * Para la navegación responsiva (ej. un menú hamburguesa en móviles).
+    * (Opcional) Pequeñas funcionalidades interactivas si se considera pertinente.
+* **Accesibilidad:** Considerar buenas prácticas de accesibilidad (ej. texto alternativo en imágenes).
+
+---
+
+**Formato de Salida:**
+
+Generar el código completo para `index.html` y `lotes.html` (o un solo `index.html` si se opta por un sitio one-page con anclas), junto con los archivos CSS (`style.css`) y JavaScript (`script.js` si es necesario). Incluir comentarios explicativos donde sea útil.
+
+---
+```http://googleusercontent.com/image_generation_content/1
