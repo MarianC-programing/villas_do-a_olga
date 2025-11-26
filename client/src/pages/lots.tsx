@@ -45,11 +45,11 @@ export default function Lots() {
   };
 
   const pricingDetails = [
-    { label: "Precio por m²", value: "$60 MXN" },
+    { label: "Precio por m²", value: "$3.50 USD" },
     { label: "Tamaño mínimo", value: "500 m²" },
-    { label: "Precio mínimo", value: "$30,000 MXN" },
-    { label: "Abono inicial (20%)", value: "$6,000 MXN" },
-    { label: "Cuota mensual", value: "$200 MXN" },
+    { label: "Precio mínimo", value: "$1,765 USD" },
+    { label: "Abono inicial (20%)", value: "$353 USD" },
+    { label: "Cuota mensual", value: "$12 USD" },
     { label: "Tasa de interés", value: "6% anual" },
   ];
 
@@ -63,22 +63,22 @@ export default function Lots() {
     {
       icon: Phone,
       label: "Teléfono",
-      value: "+52 123 456 7890",
-      href: "tel:+521234567890",
+      value: "+507 6246-8636",
+      href: "tel:+50762468636",
       testId: "link-phone",
     },
     {
       icon: Mail,
       label: "Correo Electrónico",
-      value: "info@villasdonaolga.com",
-      href: "mailto:info@villasdonaolga.com",
+      value: "marianbarba1208@gmail.com",
+      href: "mailto:marianbarba1208@gmail.com",
       testId: "link-email",
     },
     {
       icon: MessageCircle,
       label: "WhatsApp",
       value: "Enviar Mensaje",
-      href: "https://wa.me/521234567890",
+      href: "https://wa.me/50762468636",
       testId: "link-whatsapp",
     },
   ];

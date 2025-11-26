@@ -8,6 +8,8 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import Home from "@/pages/home";
 import Lots from "@/pages/lots";
+import Availability from "@/pages/availability";
+import Progress from "@/pages/progress";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -15,6 +17,8 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/lotes" component={Lots} />
+      <Route path="/disponibilidad" component={Availability} />
+      <Route path="/avance" component={Progress} />
       <Route component={NotFound} />
     </Switch>
   );

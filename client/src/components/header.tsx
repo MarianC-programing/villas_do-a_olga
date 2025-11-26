@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { Menu, X, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/theme-provider";
-import logoImage from "@assets/Venta de lotes_1764035428857.png";
+import logoImage from "/Logo-villas.svg";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -21,7 +21,8 @@ export function Header() {
 
   const navLinks = [
     { label: "Inicio", path: "/" },
-    { label: "Lotes Disponibles", path: "/lotes" },
+    { label: "Lotes Disponibles", path: "/disponibilidad" },
+    { label: "Avance del Proyecto", path: "/avance" },
     { label: "Financiamiento", path: "/lotes#financiamiento" },
     { label: "Contacto", path: "/lotes#contacto" },
   ];

@@ -137,7 +137,7 @@ export default function Home() {
                 size="lg"
                 variant="default"
                 className="mt-4"
-                onClick={() => handleNavClick("/lotes")}
+                onClick={() => handleNavClick("/disponibilidad")}
                 data-testid="button-ver-disponibilidad"
               >
                 Ver Disponibilidad Detallada

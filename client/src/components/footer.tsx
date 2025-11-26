@@ -1,7 +1,7 @@
 import { useLocation } from "wouter";
 import { Facebook, Instagram, Mail, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logoImage from "@assets/Venta de lotes_1764035428857.png";
+import logoImage from "/Logo-villas.svg";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -14,7 +14,8 @@ export function Footer() {
 
   const quickLinks = [
     { label: "Inicio", path: "/" },
-    { label: "Lotes Disponibles", path: "/lotes" },
+    { label: "Lotes Disponibles", path: "/disponibilidad" },
+    { label: "Avance del Proyecto", path: "/avance" },
     { label: "Financiamiento", path: "/lotes#financiamiento" },
     { label: "Contacto", path: "/lotes#contacto" },
   ];
@@ -81,20 +82,20 @@ export function Footer() {
             <h3 className="font-semibold text-lg mb-4">Contacto</h3>
             <div className="space-y-3">
               <a
-                href="tel:+1234567890"
+                href="tel:+50762468636"
                 className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="link-footer-phone"
               >
                 <Phone className="h-4 w-4" />
-                <span>+52 123 456 7890</span>
+                <span>+507 6246-8636</span>
               </a>
               <a
-                href="mailto:info@villasdonaolga.com"
+                href="mailto:marianbarba1208@gmail.com"
                 className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="link-footer-email"
               >
                 <Mail className="h-4 w-4" />
-                <span>info@villasdonaolga.com</span>
+                <span>marianbarba1208@gmail.com</span>
               </a>
               <div className="flex gap-2 pt-2">
                 {socialLinks.map((social) => (
