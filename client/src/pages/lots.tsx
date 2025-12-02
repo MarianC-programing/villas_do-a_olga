@@ -45,12 +45,13 @@ export default function Lots() {
   };
 
   const pricingDetails = [
-    { label: "Precio por m²", value: "$3.50 USD" },
+    { label: "Precio por m²", value: "$60 USD" },
     { label: "Tamaño mínimo", value: "500 m²" },
-    { label: "Precio mínimo", value: "$1,765 USD" },
-    { label: "Abono inicial (20%)", value: "$353 USD" },
-    { label: "Cuota mensual", value: "$12 USD" },
-    { label: "Tasa de interés", value: "6% anual" },
+    { label: "Precio Total (500 m²)", value: "$30,000 USD" },
+    { label: "Abono Inicial (20%)", value: "$6,000 USD" },
+    { label: "Saldo a Financiar", value: "$24,000 USD" },
+    { label: "Cuota Mensual Fija", value: "$200 USD" },
+    { label: "Tasa de Interés", value: "6% Fijo (Anual)" },
   ];
 
   const services = [
@@ -174,6 +175,41 @@ export default function Lots() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Financing Plan Full Width Card */}
+          <div className="mt-8">
+            <Card className="overflow-hidden">
+              <CardHeader className="bg-primary/5">
+                <CardTitle className="text-2xl">Plan de Financiamiento Flexible</CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-4 text-sm">
+                  <p>
+                    Ofrecemos un plan de pagos directo con el propietario, diseñado para facilitar su compra.
+                  </p>
+
+                  <h4 className="font-semibold">Cálculo Base (para un Lote de 500 m²):</h4>
+                  <ul className="list-disc list-inside">
+                    <li><strong>Precio Total:</strong> $30,000 USD</li>
+                    <li><strong>Abono Inicial (20% del total):</strong> <strong>$6,000 USD</strong></li>
+                    <li><strong>Saldo a Financiar:</strong> $24,000 USD</li>
+                  </ul>
+
+                  <h4 className="font-semibold">Condiciones del Financiamiento:</h4>
+                  <ul className="list-disc list-inside">
+                    <li><strong>Tasa de Interés Anual:</strong> <strong>6% Fijo</strong> (Financiamiento Directo)</li>
+                    <li><strong>Cuota Mensual Fija:</strong> <strong>$200 USD</strong> (Aplicable hasta liquidar los intereses, abonando luego directamente a capital e intereses restantes).</li>
+                    <li><strong>Plazo:</strong> El plazo total será determinado por el tiempo que tome cubrir el saldo restante con la cuota mensual mínima y el interés anual del 6%.</li>
+                  </ul>
+
+                  <p className="italic">
+                    Ejemplo: Con un abono inicial de $6,000 USD y una cuota fija de $200 USD/mes, usted asegura su terreno hoy mismo.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
         </div>
       </section>
 
@@ -245,24 +281,27 @@ export default function Lots() {
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <MapPin className="h-6 w-6 text-primary" />
+              <a
+                href="https://www.google.com/maps/place/Villas+Do%C3%B1a+Olga/@8.976258,-79.7525055,17z/data=!3m1!4b1!4m6!3m5!1s0x8fac9f2b0a39d749:0xffd954a325ed142b!8m2!3d8.976258!4d-79.7525055!16s%2Fg%2F11vynjfl5d?hl=es-419&entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="link-location"
+              >
+                <Card className="hover-elevate active-elevate-2 transition-all duration-300 cursor-pointer">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <MapPin className="h-6 w-6 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground mb-1">Ubicación</p>
+                        <p className="font-semibold">Villas Doña Olga</p>
+                        <p className="text-muted-foreground">Ver en Google Maps</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">
-                        Ubicación
-                      </p>
-                      <p className="font-semibold">Villas Doña Olga</p>
-                      <p className="text-muted-foreground">
-                        Desarrollo Residencial
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </a>
             </div>
 
             <div>
@@ -310,7 +349,7 @@ export default function Lots() {
                         onChange={(e) =>
                           setFormData({ ...formData, phone: e.target.value })
                         }
-                        placeholder="+52 123 456 7890"
+                        placeholder="+507 6246-8636"
                         data-testid="input-phone"
                       />
                     </div>
