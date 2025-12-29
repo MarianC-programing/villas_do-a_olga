@@ -2,8 +2,6 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 
 interface ProjectImage {
   id: number;
@@ -17,34 +15,28 @@ export default function ProjectProgress() {
   const [images, setImages] = useState<ProjectImage[]>([
     {
       id: 1,
-      url: "https://images.unsplash.com/photo-1541123603104-852fc5d27744?w=800&h=600&fit=crop",
+      url: "/Progress_img/fase inicial.JPG",
       title: "Inicio de Construcción",
       description: "Preparación del terreno y cimientos principales",
-      date: "Noviembre 2024",
+      date: "Noviembre 2025",
     },
     {
       id: 2,
-      url: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=600&fit=crop",
-      title: "Fase de Infraestructura",
-      description: "Instalación de servicios de agua y electricidad",
-      date: "Octubre 2024",
-    },
-    {
-      id: 3,
-      url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop",
+      url: "/Progress_img/Calle Noviembre 2025.PNG",
       title: "Pavimentación de Calles",
       description: "Construcción de accesos principales",
-      date: "Septiembre 2024",
+      date: "18 Noviembre 2025",
+    }, 
+    {
+      id: 3,
+      url: "/Progress_img/Calle Diciembre 20265.jpg",
+      title: "Últimas actualizaciones",
+      description: "Progreso reciente en diversas áreas del proyecto",
+      date: "Diciembre 2024",
     },
   ]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [newImage, setNewImage] = useState({
-    title: "",
-    description: "",
-    date: "",
-    url: "",
-  });
 
   const handlePrevious = () => {
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -52,22 +44,6 @@ export default function ProjectProgress() {
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
-
-  const handleAddImage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newImage.title && newImage.description && newImage.url) {
-      const addedImage: ProjectImage = {
-        id: Math.max(...images.map((img) => img.id), 0) + 1,
-        url: newImage.url,
-        title: newImage.title,
-        description: newImage.description,
-        date: newImage.date || new Date().toLocaleDateString("es-ES"),
-      };
-      setImages([...images, addedImage]);
-      setNewImage({ title: "", description: "", date: "", url: "" });
-      setCurrentIndex(images.length); // Go to new image
-    }
   };
 
   const currentImage = images[currentIndex];
@@ -156,83 +132,6 @@ export default function ProjectProgress() {
               </CardContent>
             </Card>
           )}
-
-          {/* Add Image Form */}
-          <Card className="mb-12">
-            <CardContent className="p-8">
-              <h2 className="text-2xl font-semibold mb-6">
-                Agregar Nueva Foto del Proyecto
-              </h2>
-
-              <form onSubmit={handleAddImage} className="space-y-6">
-                <div>
-                  <label className="text-sm font-medium block mb-2">
-                    URL de la Imagen
-                  </label>
-                  <Input
-                    type="url"
-                    placeholder="https://ejemplo.com/imagen.jpg"
-                    value={newImage.url}
-                    onChange={(e) =>
-                      setNewImage({ ...newImage, url: e.target.value })
-                    }
-                    required
-                  />
-                  <p className="text-xs text-muted-foreground mt-2">
-                    Puedes usar URLs públicas de imágenes. Ejemplo: enlace a drive,
-                    imgur, o cualquier servidor de imágenes.
-                  </p>
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium block mb-2">
-                    Título de la Foto
-                  </label>
-                  <Input
-                    placeholder="Ej: Fase de Cimentación"
-                    value={newImage.title}
-                    onChange={(e) =>
-                      setNewImage({ ...newImage, title: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium block mb-2">
-                    Descripción
-                  </label>
-                  <Textarea
-                    placeholder="Describe el estado y avance en esta etapa"
-                    value={newImage.description}
-                    onChange={(e) =>
-                      setNewImage({ ...newImage, description: e.target.value })
-                    }
-                    rows={4}
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium block mb-2">
-                    Fecha (Opcional)
-                  </label>
-                  <Input
-                    type="text"
-                    placeholder="Ej: Noviembre 2024"
-                    value={newImage.date}
-                    onChange={(e) =>
-                      setNewImage({ ...newImage, date: e.target.value })
-                    }
-                  />
-                </div>
-
-                <Button type="submit" size="lg" className="w-full">
-                  Agregar Foto
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
 
           {/* Timeline View */}
           {images.length > 0 && (

@@ -64,8 +64,8 @@ export default function Lots() {
     {
       icon: Phone,
       label: "Teléfono",
-      value: "+507 6246-8636",
-      href: "tel:+50762468636",
+      value: "+507 6325-9282",
+      href: "tel:+50763259282",
       testId: "link-phone",
     },
     {
@@ -79,7 +79,7 @@ export default function Lots() {
       icon: MessageCircle,
       label: "WhatsApp",
       value: "Enviar Mensaje",
-      href: "https://wa.me/50762468636",
+      href: "https://wa.me/50763259282",
       testId: "link-whatsapp",
     },
   ];
@@ -215,7 +215,7 @@ export default function Lots() {
 
       <section id="contacto" className="py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12"> 
             <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
               Contacto
             </h2>
