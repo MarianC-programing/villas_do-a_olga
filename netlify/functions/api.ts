@@ -1,9 +1,8 @@
 import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
+const require = createRequire(typeof __filename !== 'undefined' ? __filename : import.meta?.url);
 
 import express from 'express';
 import { registerRoutes } from '../../server/routes.js';
-import { runApp } from '../../server/app.js';
 
 const app = express();
 
@@ -15,8 +14,10 @@ app.use(express.json({
 }));
 app.use(express.urlencoded({ extended: false }));
 
-// Registrar rutas
-await registerRoutes(app);
+// Registrar rutas de forma asíncrona
+(async () => {
+  await registerRoutes(app);
+})();
 
 export const handler = async (event, context) => {
   // Usar serverless-http para adaptar Express a Netlify
