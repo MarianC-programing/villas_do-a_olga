@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import lotsHeroImage from "@assets/generated_images/development_street_view.png";
+import lotsImage from "@assets/lotesdips.avif";
 
 export default function Lots() {
 
@@ -177,122 +178,21 @@ export default function Lots() {
         </div>
       </section>
 
-      <section id="contacto" className="py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12"> 
-            <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
-              Contacto
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Estamos aquí para responder todas tus preguntas
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
-            <div className="space-y-6">
-              <h3 className="text-2xl font-semibold mb-6">
-                Información de Contacto
-              </h3>
-
-              {contactMethods.map((method, index) => (
-                <a
-                  key={index}
-                  href={method.href}
-                  target={method.href.startsWith("http") ? "_blank" : undefined}
-                  rel={
-                    method.href.startsWith("http")
-                      ? "noopener noreferrer"
-                      : undefined
-                  }
-                  data-testid={method.testId}
-                >
-                  <Card className="hover-elevate active-elevate-2 transition-all duration-300 cursor-pointer">
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                          <method.icon className="h-6 w-6 text-primary" />
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-sm text-muted-foreground mb-1">
-                            {method.label}
-                          </p>
-                          <p className="font-semibold truncate">
-                            {method.value}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </a>
-              ))}
-
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <Clock className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">
-                        Horario de Atención
-                      </p>
-                      <p className="font-semibold">Lunes a Viernes</p>
-                      <p className="text-muted-foreground">9:00 AM - 6:00 PM</p>
-                      <p className="font-semibold mt-2">Sábados</p>
-                      <p className="text-muted-foreground">10:00 AM - 2:00 PM</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <a
-                href="https://www.google.com/maps/place/Villas+Do%C3%B1a+Olga/@8.976258,-79.7525055,17z/data=!3m1!4b1!4m6!3m5!1s0x8fac9f2b0a39d749:0xffd954a325ed142b!8m2!3d8.976258!4d-79.7525055!16s%2Fg%2F11vynjfl5d?hl=es-419&entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="link-location"
-              >
-                <Card className="hover-elevate active-elevate-2 transition-all duration-300 cursor-pointer">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <MapPin className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground mb-1">Ubicación</p>
-                        <p className="font-semibold">Villas Doña Olga</p>
-                        <p className="text-muted-foreground">Ver en Google Maps</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </a>
-            </div>
-
-            <div>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-2xl">Ubicación</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="aspect-video w-full">
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.123456789!2d-79.7525055!3d8.976258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fac9f2b0a39d749%3A0xffd954a325ed142b!2sVillas+Do%C3%B1a+Olga!5e0!3m2!1ses!2sus!4v1700000000!5m2!1ses!2sus"
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="Ubicación de Villas Doña Olga"
-                    ></iframe>
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-4 text-center">
-                    Visítanos en Villas Doña Olga para conocer nuestros lotes disponibles.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+      <section
+        className="relative h-[50vh] min-h-[400px] flex items-center justify-center"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${lotsImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-4">
+            Lotes Disponibles
+          </h2>
+          <p className="text-lg md:text-xl text-white/95 max-w-2xl mx-auto">
+            Explora nuestros terrenos exclusivos y encuentra el perfecto para ti
+          </p>
         </div>
       </section>
     </div>
