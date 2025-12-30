@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import lotsHeroImage from "/pogrss.jpg";
 
 interface ProjectImage {
   id: number;
@@ -51,12 +52,19 @@ export default function ProjectProgress() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <section className="relative h-[40vh] min-h-[300px] flex items-center justify-center bg-primary/10">
+      <section
+        className="relative h-[40vh] min-h-[300px] flex items-center justify-center"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url(${lotsHeroImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground mb-4">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-4">
             Avance del Proyecto
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground">
+          <p className="text-lg md:text-xl text-white/95">
             Síguenos en el desarrollo de Villas Doña Olga
           </p>
         </div>

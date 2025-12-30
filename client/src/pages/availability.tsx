@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { MapPin, Maximize2, Home, DollarSign, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import lotsHeroImage from "/lotesdips.avif";
 import { Badge } from "@/components/ui/badge";
 
 interface Lot {
@@ -117,12 +118,19 @@ export default function Availability() {
 
   return (
     <div className="min-h-screen">
-      <section className="relative h-[40vh] min-h-[300px] flex items-center justify-center bg-primary/10">
+      <section
+        className="relative h-[40vh] min-h-[300px] flex items-center justify-center"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url(${lotsHeroImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground mb-4">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-4">
             Disponibilidad de Lotes
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground">
+          <p className="text-lg md:text-xl text-white/95">
             Visualiza el plano y consulta los detalles de cada lote
           </p>
         </div>
@@ -234,59 +242,7 @@ export default function Availability() {
             </div>
           </div>
 
-          {/* Contact Information */}
-          <div className="mt-16">
-            <h2 className="text-3xl font-semibold mb-8">
-              Información de Contacto
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Phone className="h-6 w-6 text-primary" />
-                    <div>
-                      <p className="font-medium">Teléfono</p>
-                      <p className="text-muted-foreground">+1 (555) 123-4567</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
 
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Mail className="h-6 w-6 text-primary" />
-                    <div>
-                      <p className="font-medium">Correo electrónico</p>
-                      <p className="text-muted-foreground">info@villasolga.com</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <div className="space-y-2">
-                    <p className="font-medium mb-2">Horarios de atención</p>
-                    <div className="text-sm space-y-1">
-                      <div className="flex justify-between">
-                        <span>Lunes - Viernes</span>
-                        <span>9:00 AM - 6:00 PM</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Sábado</span>
-                        <span>10:00 AM - 4:00 PM</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Domingo</span>
-                        <span>Cerrado</span>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
         </div>
       </section>
     </div>

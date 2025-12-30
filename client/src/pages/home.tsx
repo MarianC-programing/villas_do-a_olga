@@ -61,7 +61,7 @@ export default function Home() {
           <Button
             size="lg"
             className="text-lg px-8 py-6 bg-primary/90 hover:bg-primary backdrop-blur-sm border border-primary-border"
-            onClick={() => handleNavClick("/lotes")}
+            onClick={() => handleNavClick("/disponibilidad")}
             data-testid="button-ver-lotes"
           >
             Ver Lotes Ahora
@@ -167,7 +167,7 @@ export default function Home() {
           <Button
             size="lg"
             className="text-lg px-8 py-6 bg-primary/90 hover:bg-primary backdrop-blur-sm border border-primary-border"
-            onClick={() => handleNavClick("/lotes#contacto")}
+            onClick={() => handleNavClick("/lotes")}
             data-testid="button-contactanos"
           >
             Contáctanos
