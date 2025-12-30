@@ -310,11 +310,12 @@ export default function Lots() {
                   <CardTitle className="text-2xl">Envíanos un Mensaje</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-4">
+                  <form onSubmit={handleSubmit} className="space-y-4" data-netlify="true" name="contact-form">
                     <div className="space-y-2">
                       <Label htmlFor="name">Nombre Completo *</Label>
                       <Input
                         id="name"
+                        name="name"
                         required
                         value={formData.name}
                         onChange={(e) =>
@@ -329,6 +330,7 @@ export default function Lots() {
                       <Label htmlFor="email">Correo Electrónico *</Label>
                       <Input
                         id="email"
+                        name="email"
                         type="email"
                         required
                         value={formData.email}
@@ -344,6 +346,7 @@ export default function Lots() {
                       <Label htmlFor="phone">Teléfono</Label>
                       <Input
                         id="phone"
+                        name="phone"
                         type="tel"
                         value={formData.phone}
                         onChange={(e) =>
@@ -358,6 +361,7 @@ export default function Lots() {
                       <Label htmlFor="message">Mensaje *</Label>
                       <Textarea
                         id="message"
+                        name="message"
                         required
                         value={formData.message}
                         onChange={(e) =>
