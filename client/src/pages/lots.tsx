@@ -1,48 +1,12 @@
-import { useState } from "react";
 import { Phone, Mail, MessageCircle, MapPin, Clock, Zap, Droplet, Navigation } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
 import lotsHeroImage from "@assets/generated_images/development_street_view.png";
 
 export default function Lots() {
-  const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-
-  const contactMutation = useMutation({
-    mutationFn: async (data: typeof formData) => {
-      return await apiRequest("POST", "/api/contact", data);
-    },
-    onSuccess: () => {
-      toast({
-        title: "Mensaje Enviado",
-        description: "Nos pondremos en contacto contigo pronto.",
-      });
-      setFormData({ name: "", email: "", phone: "", message: "" });
-    },
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "No se pudo enviar el mensaje. Por favor, intenta de nuevo.",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    contactMutation.mutate(formData);
-  };
 
   const pricingDetails = [
     { label: "Precio por m²", value: "$60 USD" },
@@ -307,87 +271,24 @@ export default function Lots() {
             <div>
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-2xl">Envíanos un Mensaje</CardTitle>
+                  <CardTitle className="text-2xl">Ubicación</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-4" data-netlify="true" name="contact-form">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Nombre Completo *</Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        required
-                        value={formData.name}
-                        onChange={(e) =>
-                          setFormData({ ...formData, name: e.target.value })
-                        }
-                        placeholder="Tu nombre"
-                        data-testid="input-name"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Correo Electrónico *</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
-                        }
-                        placeholder="tu@email.com"
-                        data-testid="input-email"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Teléfono</Label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        value={formData.phone}
-                        onChange={(e) =>
-                          setFormData({ ...formData, phone: e.target.value })
-                        }
-                        placeholder="+507 6246-8636"
-                        data-testid="input-phone"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="message">Mensaje *</Label>
-                      <Textarea
-                        id="message"
-                        name="message"
-                        required
-                        value={formData.message}
-                        onChange={(e) =>
-                          setFormData({ ...formData, message: e.target.value })
-                        }
-                        placeholder="¿En qué podemos ayudarte?"
-                        rows={5}
-                        data-testid="input-message"
-                      />
-                    </div>
-
-                    <Button
-                      type="submit"
-                      className="w-full"
-                      size="lg"
-                      disabled={contactMutation.isPending}
-                      data-testid="button-submit-contact"
-                    >
-                      {contactMutation.isPending ? "Enviando..." : "Enviar Mensaje"}
-                    </Button>
-
-                    <p className="text-xs text-muted-foreground text-center">
-                      * Al enviar este formulario, nos pondremos en contacto
-                      contigo a la brevedad posible.
-                    </p>
-                  </form>
+                  <div className="aspect-video w-full">
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.123456789!2d-79.7525055!3d8.976258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fac9f2b0a39d749%3A0xffd954a325ed142b!2sVillas+Do%C3%B1a+Olga!5e0!3m2!1ses!2sus!4v1700000000!5m2!1ses!2sus"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Ubicación de Villas Doña Olga"
+                    ></iframe>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-4 text-center">
+                    Visítanos en Villas Doña Olga para conocer nuestros lotes disponibles.
+                  </p>
                 </CardContent>
               </Card>
             </div>
