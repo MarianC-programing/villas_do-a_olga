@@ -3,7 +3,7 @@ import path from "node:path";
 import { type Server } from "node:http";
 
 import { nanoid } from "nanoid";
-import { type Express } from "express";
+import express, { type Express } from "express";
 import { createServer as createViteServer, createLogger } from "vite";
 
 import viteConfig from "../vite.config";
@@ -30,6 +30,9 @@ export async function setupVite(app: Express, server: Server) {
     server: serverOptions,
     appType: "custom",
   });
+
+  // Serve static files from public directory
+  app.use(express.static(path.resolve(import.meta.dirname, "..", "public")));
 
   app.use(vite.middlewares);
   app.use("*", async (req, res, next) => {

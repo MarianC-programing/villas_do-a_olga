@@ -1,7 +1,7 @@
 import { useLocation } from "wouter";
 import { Facebook, Instagram, Mail, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logoImage from "/Logo-villas.svg";
+import logoImage from "@assets/Logo-villas.webp";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();

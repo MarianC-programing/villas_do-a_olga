@@ -1,7 +1,7 @@
 import { Phone, Mail, MessageCircle, MapPin, Clock, Zap, Droplet, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import lotsHeroImage from "@assets/generated_images/development_street_view.png";
+import lotsHeroImage from "@assets/generated_images/development_street_view.webp";
 
 export default function Lots() {
 

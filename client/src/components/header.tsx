@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logoImage from "/Logo-villas.svg";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -62,7 +61,7 @@ export function Header() {
             className="flex items-center gap-2 hover-elevate active-elevate-2 rounded-md px-2 py-1 -ml-2"
           >
             <img
-              src={logoImage}
+              src="/Logo-villas.webp"
               alt="Villas Doña Olga"
               className="h-10 w-10 md:h-12 md:w-12"
             />

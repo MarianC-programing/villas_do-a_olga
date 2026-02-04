@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import lotsHeroImage from "/pogrss.jpg";
+import lotsHeroImage from "@assets/generated_images/scene-construction-site-with-equipment.webp";
 
 interface ProjectImage {
   id: number;
@@ -16,21 +16,21 @@ export default function ProjectProgress() {
   const [images, setImages] = useState<ProjectImage[]>([
     {
       id: 1,
-      url: "/Progress_img/fase inicial.JPG",
+      url: "/Progress_img/fase inicial.webp",
       title: "Inicio de Construcción",
       description: "Preparación del terreno y cimientos principales",
       date: "Noviembre 2025",
     },
     {
       id: 2,
-      url: "/Progress_img/Calle Noviembre 2025.PNG",
+      url: "/Progress_img/Calle Noviembre 2025.webp",
       title: "Pavimentación de Calles",
       description: "Construcción de accesos principales",
       date: "18 Noviembre 2025",
     }, 
     {
       id: 3,
-      url: "/Progress_img/Calle Diciembre 20265.jpg",
+      url: "/Progress_img/Calle Diciembre 20265.webp",
       title: "Últimas actualizaciones",
       description: "Progreso reciente en diversas áreas del proyecto",
       date: "Diciembre 2024",

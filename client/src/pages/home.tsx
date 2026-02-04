@@ -2,8 +2,8 @@ import { useLocation } from "wouter";
 import { DollarSign, Handshake, Lightbulb, Map } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import heroImage from "@assets/generated_images/countryside_villas_hero_background.png";
-import ctaImage from "@assets/generated_images/community_aerial_view_background.png";
+import heroImage from "@assets/generated_images/countryside_villas_hero_background.webp";
+import ctaImage from "@assets/generated_images/community_aerial_view_background.webp";
 
 export default function Home() {
   const [, navigate] = useLocation();

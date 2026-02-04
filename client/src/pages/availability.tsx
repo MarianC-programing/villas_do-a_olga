@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { MapPin, Maximize2, Home, DollarSign, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import lotsHeroImage from "/lotesdips.avif";
+import lotsHeroImage from "@assets/generated_images/lotesdips.webp";
 import { Badge } from "@/components/ui/badge";
 
 interface Lot {
@@ -152,7 +152,7 @@ export default function Availability() {
                   <div className={`relative bg-muted ${zoomedIn ? "p-4 overflow-auto max-h-[600px]" : ""}`}>
                     <div className="relative">
                       <img
-                        src="/Gemini_Generated_Image_91fpr591fpr591fp.jpeg"
+                        src="/Gemini_Generated_Image_91fpr591fpr591fp.webp"
                         alt="Plano general del proyecto Villas Doña Olga"
                         className={`w-full h-auto border transition-transform ${
                           zoomedIn ? "scale-150" : "scale-100"

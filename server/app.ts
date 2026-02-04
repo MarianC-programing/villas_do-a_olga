@@ -88,7 +88,7 @@ export default async function runApp(
   const port = parseInt(process.env.PORT || '5000', 10);
   const listenOpts: any = {
     port,
-    host: "0.0.0.0",
+    host: "localhost",
   };
 
   // `reusePort` is not supported on some platforms (notably Windows), so only
