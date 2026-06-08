@@ -1,13 +1,8 @@
 /**
  * components/contact-form.tsx
  *
- * Formulario de contacto que conecta con el endpoint POST /api/contact.
- * Usa React Hook Form + Zod para validación client-side.
- * Usa TanStack Query useMutation para el envío al backend.
- *
- * Por qué componente separado:
- *   - Reutilizable: se usa en /contacto y puede embeberse en /disponibilidad.
- *   - Testeable: la lógica de envío está aislada del layout de la página.
+ * S2-U1: Lee ?lote= de la URL para pre-llenar el mensaje cuando el usuario
+ * llega desde el botón "Me interesa este lote" en /disponibilidad.
  */
 
 import { useForm } from "react-hook-form";
@@ -19,31 +14,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Send } from "lucide-react";
 
-// ── Schema de validación ─────────────────────────────────────────────────────
-
 const contactSchema = z.object({
-  name: z
-    .string()
-    .min(2, "El nombre debe tener al menos 2 caracteres")
-    .max(100, "Nombre demasiado largo"),
-  email: z
-    .string()
-    .email("Ingresa un correo electrónico válido"),
+  name: z.string().min(2, "El nombre debe tener al menos 2 caracteres").max(100),
+  email: z.string().email("Ingresa un correo electrónico válido"),
   phone: z
     .string()
     .regex(/^[\d\s\-\+\(\)]*$/, "Solo se permiten números y caracteres +()-")
-    .max(20, "Teléfono demasiado largo")
+    .max(20)
     .optional()
     .or(z.literal("")),
   message: z
     .string()
     .min(10, "El mensaje debe tener al menos 10 caracteres")
-    .max(1000, "Mensaje demasiado largo (máx. 1000 caracteres)"),
+    .max(1000, "Máximo 1000 caracteres"),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
-
-// ── API ──────────────────────────────────────────────────────────────────────
 
 async function submitContact(data: ContactFormData): Promise<{ success: boolean; message: string }> {
   const response = await fetch("/api/contact", {
@@ -51,32 +37,21 @@ async function submitContact(data: ContactFormData): Promise<{ success: boolean;
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-
   const json = await response.json();
-
-  if (!response.ok) {
-    throw new Error(json.message ?? "Error al enviar el mensaje");
-  }
-
+  if (!response.ok) throw new Error(json.message ?? "Error al enviar el mensaje");
   return json;
 }
 
-// ── Props ────────────────────────────────────────────────────────────────────
-
 interface ContactFormProps {
-  /** Lote preseleccionado — se inyecta como contexto en el mensaje */
   preselectedLot?: string;
-  /** Título del card (default: "Envíanos un Mensaje") */
   title?: string;
 }
-
-// ── Componente ───────────────────────────────────────────────────────────────
 
 export function ContactForm({ preselectedLot, title = "Envíanos un Mensaje" }: ContactFormProps) {
   const { toast } = useToast();
 
   const defaultMessage = preselectedLot
-    ? `Hola, estoy interesado en el lote ${preselectedLot}. ¿Podrían darme más información?`
+    ? `Hola, estoy interesado en el Lote ${preselectedLot}. ¿Podrían darme más información sobre precio y disponibilidad?`
     : "";
 
   const {
@@ -95,60 +70,45 @@ export function ContactForm({ preselectedLot, title = "Envíanos un Mensaje" }: 
   const mutation = useMutation({
     mutationFn: submitContact,
     onSuccess: (data) => {
-      toast({
-        title: "¡Mensaje enviado!",
-        description: data.message,
-      });
+      toast({ title: "¡Mensaje enviado!", description: data.message });
       reset();
     },
     onError: (error: Error) => {
-      toast({
-        title: "Error al enviar",
-        description: error.message,
-        variant: "destructive",
-      });
+      toast({ title: "Error al enviar", description: error.message, variant: "destructive" });
     },
   });
 
   const onSubmit = (data: ContactFormData) => {
-    // Limpiar teléfono vacío para no enviarlo como string vacío
-    const payload = { ...data, phone: data.phone || undefined };
-    mutation.mutate(payload);
+    mutation.mutate({ ...data, phone: data.phone || undefined });
   };
+
+  const inputClass = (hasError: boolean) =>
+    `flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm
+     ring-offset-background placeholder:text-muted-foreground
+     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+     disabled:cursor-not-allowed disabled:opacity-50
+     ${hasError ? "border-destructive" : "border-input"}`;
 
   return (
     <Card data-testid="contact-form-card">
       <CardHeader>
         <CardTitle className="text-2xl">{title}</CardTitle>
+        {preselectedLot && (
+          <p className="text-sm text-muted-foreground mt-1">
+            Consultando sobre: <span className="font-semibold text-primary">Lote {preselectedLot}</span>
+          </p>
+        )}
       </CardHeader>
       <CardContent>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          noValidate
-          className="space-y-5"
-          data-testid="contact-form"
-        >
-          {/* Nombre */}
+        <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5" data-testid="contact-form">
+
           <div className="space-y-1.5">
-            <label
-              htmlFor="contact-name"
-              className="text-sm font-medium leading-none"
-            >
+            <label htmlFor="contact-name" className="text-sm font-medium">
               Nombre completo <span className="text-destructive">*</span>
             </label>
-            <input
-              id="contact-name"
-              type="text"
-              autoComplete="name"
-              placeholder="Ej: María González"
-              data-testid="input-name"
-              className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm
-                ring-offset-background placeholder:text-muted-foreground
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
-                disabled:cursor-not-allowed disabled:opacity-50
-                ${errors.name ? "border-destructive" : "border-input"}`}
-              {...register("name")}
-            />
+            <input id="contact-name" type="text" autoComplete="name"
+              placeholder="Ej: María González" data-testid="input-name"
+              className={inputClass(!!errors.name)} {...register("name")} />
             {errors.name && (
               <p className="text-xs text-destructive" role="alert" data-testid="error-name">
                 {errors.name.message}
@@ -156,27 +116,13 @@ export function ContactForm({ preselectedLot, title = "Envíanos un Mensaje" }: 
             )}
           </div>
 
-          {/* Email */}
           <div className="space-y-1.5">
-            <label
-              htmlFor="contact-email"
-              className="text-sm font-medium leading-none"
-            >
+            <label htmlFor="contact-email" className="text-sm font-medium">
               Correo electrónico <span className="text-destructive">*</span>
             </label>
-            <input
-              id="contact-email"
-              type="email"
-              autoComplete="email"
-              placeholder="tu@correo.com"
-              data-testid="input-email"
-              className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm
-                ring-offset-background placeholder:text-muted-foreground
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
-                disabled:cursor-not-allowed disabled:opacity-50
-                ${errors.email ? "border-destructive" : "border-input"}`}
-              {...register("email")}
-            />
+            <input id="contact-email" type="email" autoComplete="email"
+              placeholder="tu@correo.com" data-testid="input-email"
+              className={inputClass(!!errors.email)} {...register("email")} />
             {errors.email && (
               <p className="text-xs text-destructive" role="alert" data-testid="error-email">
                 {errors.email.message}
@@ -184,28 +130,13 @@ export function ContactForm({ preselectedLot, title = "Envíanos un Mensaje" }: 
             )}
           </div>
 
-          {/* Teléfono (opcional) */}
           <div className="space-y-1.5">
-            <label
-              htmlFor="contact-phone"
-              className="text-sm font-medium leading-none"
-            >
-              Teléfono{" "}
-              <span className="text-muted-foreground font-normal">(opcional)</span>
+            <label htmlFor="contact-phone" className="text-sm font-medium">
+              Teléfono <span className="text-muted-foreground font-normal">(opcional)</span>
             </label>
-            <input
-              id="contact-phone"
-              type="tel"
-              autoComplete="tel"
-              placeholder="+507 6000-0000"
-              data-testid="input-phone"
-              className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm
-                ring-offset-background placeholder:text-muted-foreground
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
-                disabled:cursor-not-allowed disabled:opacity-50
-                ${errors.phone ? "border-destructive" : "border-input"}`}
-              {...register("phone")}
-            />
+            <input id="contact-phone" type="tel" autoComplete="tel"
+              placeholder="+507 6000-0000" data-testid="input-phone"
+              className={inputClass(!!errors.phone)} {...register("phone")} />
             {errors.phone && (
               <p className="text-xs text-destructive" role="alert" data-testid="error-phone">
                 {errors.phone.message}
@@ -213,62 +144,35 @@ export function ContactForm({ preselectedLot, title = "Envíanos un Mensaje" }: 
             )}
           </div>
 
-          {/* Mensaje */}
           <div className="space-y-1.5">
-            <label
-              htmlFor="contact-message"
-              className="text-sm font-medium leading-none"
-            >
+            <label htmlFor="contact-message" className="text-sm font-medium">
               Mensaje <span className="text-destructive">*</span>
             </label>
-            <textarea
-              id="contact-message"
-              rows={5}
-              placeholder="¿En qué lote estás interesado? ¿Tienes preguntas sobre el financiamiento?"
+            <textarea id="contact-message" rows={5}
+              placeholder="¿En qué lote estás interesado? ¿Tienes preguntas sobre financiamiento?"
               data-testid="input-message"
               className={`flex w-full rounded-md border bg-background px-3 py-2 text-sm
                 ring-offset-background placeholder:text-muted-foreground
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
                 disabled:cursor-not-allowed disabled:opacity-50 resize-none
                 ${errors.message ? "border-destructive" : "border-input"}`}
-              {...register("message")}
-            />
+              {...register("message")} />
             <div className="flex justify-between items-start">
-              {errors.message ? (
-                <p className="text-xs text-destructive" role="alert" data-testid="error-message">
-                  {errors.message.message}
-                </p>
-              ) : (
-                <span />
-              )}
-              <span
-                className={`text-xs tabular-nums ${
-                  messageLength > 950 ? "text-destructive" : "text-muted-foreground"
-                }`}
-              >
+              {errors.message
+                ? <p className="text-xs text-destructive" role="alert" data-testid="error-message">{errors.message.message}</p>
+                : <span />
+              }
+              <span className={`text-xs tabular-nums ${messageLength > 950 ? "text-destructive" : "text-muted-foreground"}`}>
                 {messageLength}/1000
               </span>
             </div>
           </div>
 
-          {/* Submit */}
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={mutation.isPending}
-            data-testid="btn-submit-contact"
-          >
-            {mutation.isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Enviando...
-              </>
-            ) : (
-              <>
-                <Send className="mr-2 h-4 w-4" />
-                Enviar Mensaje
-              </>
-            )}
+          <Button type="submit" className="w-full" disabled={mutation.isPending} data-testid="btn-submit-contact">
+            {mutation.isPending
+              ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Enviando...</>
+              : <><Send className="mr-2 h-4 w-4" />Enviar Mensaje</>
+            }
           </Button>
         </form>
       </CardContent>
