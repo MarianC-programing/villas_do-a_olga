@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { type Server } from "node:http";
 
-import { nanoid } from "nanoid";
+// fix B4: reemplazado nanoid (no declarado en package.json) con crypto.randomUUID() nativo
 import { type Express } from "express";
 import { createServer as createViteServer, createLogger } from "vite";
 
@@ -43,11 +43,12 @@ export async function setupVite(app: Express, server: Server) {
         "index.html",
       );
 
-      // always reload the index.html file from disk incase it changes
+      // Recarga el index.html desde disco en cada request para reflejar cambios en dev
+      // crypto.randomUUID() fuerza el cache-bust igual que nanoid() hacía antes
       let template = await fs.promises.readFile(clientTemplate, "utf-8");
       template = template.replace(
         `src="/src/main.tsx"`,
-        `src="/src/main.tsx?v=${nanoid()}"`,
+        `src="/src/main.tsx?v=${crypto.randomUUID()}"`,
       );
       const page = await vite.transformIndexHtml(url, template);
       res.status(200).set({ "Content-Type": "text/html" }).end(page);
