@@ -5,6 +5,25 @@ server/public
 vite.config.ts.*
 *.tar.gz
 
-# Artefactos de build de Netlify Functions (generados por esbuild en pnpm run build)
+# Variables de entorno — NUNCA subir al repo
+.env
+.env.local
+.env.*.local
+
+# Base de datos local de desarrollo
+dev.sqlite
+
+# Artefactos de build de Netlify Functions
 netlify/functions/api.js
 netlify/functions/api.js.map
+
+# Archivos de Replit (no necesarios fuera de esa plataforma)
+.replit
+replit.md
+
+# Scripts solo para Windows (el proyecto corre en Linux/Netlify)
+*.bat
+*.ps1
+
+# Archivos temporales de verificación
+check-neon.mjs
