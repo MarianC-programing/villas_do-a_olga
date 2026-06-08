@@ -1,45 +1,37 @@
-import { useLocation } from "wouter";
 import { DollarSign, Handshake, Lightbulb, Map } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useNavigation } from "@/hooks/use-navigation";
 import heroImage from "@assets/generated_images/countryside_villas_hero_background.png";
 import ctaImage from "@assets/generated_images/community_aerial_view_background.png";
 
-export default function Home() {
-  const [, navigate] = useLocation();
+const benefits = [
+  {
+    icon: DollarSign,
+    title: "Precios Competitivos",
+    description:
+      "$60 por metro cuadrado. Lotes desde 500m² con un precio mínimo de $30,000.",
+    highlight: "$60/m²",
+  },
+  {
+    icon: Handshake,
+    title: "Financiamiento Flexible",
+    description:
+      "20% de abono inicial ($6,000) y $200 mensuales con solo 6% de interés anual.",
+    highlight: "$200/mes",
+  },
+  {
+    icon: Lightbulb,
+    title: "Servicios Incluidos",
+    description:
+      "Luz eléctrica, agua potable y acceso por calle pavimentada en desarrollo.",
+    highlight: "Luz • Agua • Calle",
+  },
+];
 
-  const handleNavClick = (path: string) => {
-    if (path.includes("#")) {
-      const [route, hash] = path.split("#");
-      navigate(route);
-      setTimeout(() => {
-        const element = document.getElementById(hash);
-        element?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    } else {
-      navigate(path);
-    }
-  };
-  const benefits = [
-    {
-      icon: DollarSign,
-      title: "Precios Competitivos",
-      description: "$60 por metro cuadrado. Lotes desde 500m² con un precio mínimo de $30,000.",
-      highlight: "$60/m²",
-    },
-    {
-      icon: Handshake,
-      title: "Financiamiento Flexible",
-      description: "20% de abono inicial ($6,000) y $200 mensuales con solo 6% de interés anual.",
-      highlight: "$200/mes",
-    },
-    {
-      icon: Lightbulb,
-      title: "Servicios Incluidos",
-      description: "Luz eléctrica, agua potable y acceso por calle pavimentada en desarrollo.",
-      highlight: "Luz • Agua • Calle",
-    },
-  ];
+export default function Home() {
+  // fix Q1: usar hook compartido en lugar de handleNavClick duplicado
+  const { handleNavClick } = useNavigation();
 
   return (
     <div className="min-h-screen">
@@ -98,9 +90,7 @@ export default function Home() {
                     <p className="text-2xl md:text-3xl font-bold text-primary">
                       {benefit.highlight}
                     </p>
-                    <p className="text-muted-foreground">
-                      {benefit.description}
-                    </p>
+                    <p className="text-muted-foreground">{benefit.description}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -167,7 +157,7 @@ export default function Home() {
           <Button
             size="lg"
             className="text-lg px-8 py-6 bg-primary/90 hover:bg-primary backdrop-blur-sm border border-primary-border"
-            onClick={() => handleNavClick("/lotes")}
+            onClick={() => handleNavClick("/contacto")}
             data-testid="button-contactanos"
           >
             Contáctanos

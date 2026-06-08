@@ -1,56 +1,32 @@
-import { createRequire } from 'module';
-const require = createRequire(typeof __filename !== 'undefined' ? __filename : import.meta?.url);
+/**
+ * netlify/functions/api.ts
+ *
+ * Adapter de Express → Netlify Function usando serverless-http.
+ *
+ * Por qué no duplicamos rutas aquí:
+ *   - server/routes.ts es la única fuente de verdad de la API.
+ *   - Este archivo solo adapta el app Express al entorno serverless.
+ *   - Si se agrega un endpoint en routes.ts, automáticamente aparece aquí.
+ *
+ * Flujo:
+ *   Netlify event → serverless-http → Express app → routes.ts → storage.ts → BD
+ *
+ * Nota sobre imports:
+ *   Los alias @shared y @/* son resueltos por Vite/esbuild pero NO por el
+ *   runtime de Netlify Functions. Se usan rutas relativas explícitas aquí.
+ */
 
-import express from 'express';
-import { storage } from '../../server/storage.js';
-import { insertContactSubmissionSchema } from '../../shared/schema.js';
+import serverless from "serverless-http";
+import express from "express";
+import { registerRoutes } from "../../server/routes.js";
 
 const app = express();
 
-// Configurar app como en app.ts
-app.use(express.json({
-  verify: (req, _res, buf) => {
-    req.rawBody = buf;
-  }
-}));
+app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Registrar rutas directamente
-app.post("/api/contact", async (req, res) => {
-  try {
-    const validatedData = insertContactSubmissionSchema.parse(req.body);
-    const submission = await storage.createContactSubmission(validatedData);
-    
-    res.json({
-      success: true,
-      message: "Mensaje recibido. Nos pondremos en contacto pronto.",
-      id: submission.id,
-    });
-  } catch (error) {
-    console.error("Contact form error:", error);
-    res.status(400).json({
-      success: false,
-      message: "Error al enviar el mensaje. Por favor, intenta de nuevo.",
-    });
-  }
-});
+// registerRoutes registra los endpoints y retorna un Server HTTP.
+// En Netlify ignoramos el Server — serverless-http maneja el lifecycle.
+await registerRoutes(app);
 
-app.get("/api/contact-submissions", async (_req, res) => {
-  try {
-    const submissions = await storage.getAllContactSubmissions();
-    res.json(submissions);
-  } catch (error) {
-    console.error("Error fetching contact submissions:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error al obtener las solicitudes de contacto.",
-    });
-  }
-});
-
-export const handler = async (event, context) => {
-  // Usar serverless-http para adaptar Express a Netlify
-  const serverless = require('serverless-http');
-  const handler = serverless(app);
-  return handler(event, context);
-};
+export const handler = serverless(app);
