@@ -1,14 +1,10 @@
 import { useLocation } from "wouter";
 
 /**
- * useNavigation — hook compartido para navegación con soporte de anclas (#hash).
- *
- * Reemplaza la función handleNavClick que estaba duplicada en:
- *   - client/src/pages/home.tsx
- *   - client/src/components/header.tsx
- *   - client/src/components/footer.tsx
+ * useNavigation — hook compartido para navegación con soporte de anclas y query params.
  *
  * fix Q1: eliminar duplicación de lógica de navegación (DRY)
+ * S2-U1: agrega navigateToContact(lotNumber) para pre-llenar el formulario
  */
 export function useNavigation() {
   const [location, navigate] = useLocation();
@@ -29,10 +25,6 @@ export function useNavigation() {
     }
   };
 
-  /**
-   * Versión para usar en event handlers de React (e.g. onClick de <Button>)
-   * que reciben un MouseEvent como primer argumento.
-   */
   const handleNavClickEvent = (
     e: React.MouseEvent,
     path: string,
@@ -43,5 +35,18 @@ export function useNavigation() {
     handleNavClick(path);
   };
 
-  return { handleNavClick, handleNavClickEvent, location, navigate };
+  /**
+   * S2-U1: navega a /contacto con el número de lote como query param.
+   * ContactForm lo lee para pre-llenar el mensaje con el lote seleccionado.
+   * Ejemplo: navigateToContact("LR C12") → /contacto?lote=LR%20C12
+   */
+  const navigateToContact = (lotNumber?: string) => {
+    if (lotNumber) {
+      navigate(`/contacto?lote=${encodeURIComponent(lotNumber)}`);
+    } else {
+      navigate("/contacto");
+    }
+  };
+
+  return { handleNavClick, handleNavClickEvent, navigateToContact, location, navigate };
 }
