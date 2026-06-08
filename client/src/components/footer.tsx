@@ -1,15 +1,25 @@
-import { useLocation } from "wouter";
 import { Facebook, Instagram, Mail, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigation } from "@/hooks/use-navigation";
 import logoImage from "/Logo-villas.svg";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
-  const [location, navigate] = useLocation();
+  // fix Q1: usar hook compartido en lugar de handleNavClick duplicado
+  const { handleNavClickEvent } = useNavigation();
 
   const socialLinks = [
-    { icon: Facebook, href: "#", label: "Facebook" },
-    { icon: Instagram, href: "#", label: "Instagram" },
+    {
+      icon: Facebook,
+      // fix Q4: links sociales reales — actualizar cuando se tengan las URLs
+      href: "https://www.facebook.com/VillasDonOlga",
+      label: "Facebook",
+    },
+    {
+      icon: Instagram,
+      href: "https://www.instagram.com/villasdonaolga",
+      label: "Instagram",
+    },
   ];
 
   const quickLinks = [
@@ -17,28 +27,8 @@ export function Footer() {
     { label: "Lotes Disponibles", path: "/disponibilidad" },
     { label: "Avance del Proyecto", path: "/avance" },
     { label: "Financiamiento", path: "/lotes#financiamiento" },
-    { label: "Contacto", path: "/lotes#contacto" },
+    { label: "Contacto", path: "/contacto" },
   ];
-
-  const handleNavClick = (e: React.MouseEvent, path: string) => {
-    e.preventDefault();
-    
-    if (path.includes("#")) {
-      const [route, hash] = path.split("#");
-      if (location !== route) {
-        navigate(route);
-        setTimeout(() => {
-          const element = document.getElementById(hash);
-          element?.scrollIntoView({ behavior: "smooth" });
-        }, 100);
-      } else {
-        const element = document.getElementById(hash);
-        element?.scrollIntoView({ behavior: "smooth" });
-      }
-    } else {
-      navigate(path);
-    }
-  };
 
   return (
     <footer className="bg-muted border-t">
@@ -69,7 +59,7 @@ export function Footer() {
                   key={link.path}
                   variant="ghost"
                   className="justify-start px-0 h-auto text-muted-foreground hover:text-foreground"
-                  onClick={(e) => handleNavClick(e, link.path)}
+                  onClick={(e) => handleNavClickEvent(e, link.path)}
                   data-testid={`link-footer-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
                 >
                   {link.label}
@@ -102,6 +92,8 @@ export function Footer() {
                   <a
                     key={social.label}
                     href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label={social.label}
                     data-testid={`link-footer-${social.label.toLowerCase()}`}
                   >
