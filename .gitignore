@@ -4,3 +4,7 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+
+# Artefactos de build de Netlify Functions (generados por esbuild en pnpm run build)
+netlify/functions/api.js
+netlify/functions/api.js.map
