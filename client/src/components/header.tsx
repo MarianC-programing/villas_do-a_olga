@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigation } from "@/hooks/use-navigation";
 import logoImage from "/Logo-villas.svg";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [location, navigate] = useLocation();
+  // fix Q1: usar hook compartido en lugar de handleNavClick duplicado
+  const { handleNavClickEvent, location } = useNavigation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,29 +23,8 @@ export function Header() {
     { label: "Lotes Disponibles", path: "/disponibilidad" },
     { label: "Avance del Proyecto", path: "/avance" },
     { label: "Financiamiento", path: "/lotes#financiamiento" },
-    { label: "Contacto", path: "/lotes#contacto" },
+    { label: "Contacto", path: "/contacto" },
   ];
-
-  const handleNavClick = (e: React.MouseEvent, path: string) => {
-    e.preventDefault();
-    setIsMobileMenuOpen(false);
-    
-    if (path.includes("#")) {
-      const [route, hash] = path.split("#");
-      if (location !== route) {
-        navigate(route);
-        setTimeout(() => {
-          const element = document.getElementById(hash);
-          element?.scrollIntoView({ behavior: "smooth" });
-        }, 100);
-      } else {
-        const element = document.getElementById(hash);
-        element?.scrollIntoView({ behavior: "smooth" });
-      }
-    } else {
-      navigate(path);
-    }
-  };
 
   return (
     <header
@@ -57,7 +37,7 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <button
-            onClick={(e) => handleNavClick(e, "/")}
+            onClick={(e) => handleNavClickEvent(e, "/")}
             data-testid="link-home"
             className="flex items-center gap-2 hover-elevate active-elevate-2 rounded-md px-2 py-1 -ml-2"
           >
@@ -81,7 +61,7 @@ export function Header() {
                     ? "text-primary"
                     : "text-foreground"
                 }`}
-                onClick={(e) => handleNavClick(e, link.path)}
+                onClick={(e) => handleNavClickEvent(e, link.path)}
                 data-testid={`link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
               >
                 {link.label}
@@ -118,7 +98,11 @@ export function Header() {
                       ? "text-primary bg-primary/10"
                       : "text-foreground"
                   }`}
-                  onClick={(e) => handleNavClick(e, link.path)}
+                  onClick={(e) =>
+                    handleNavClickEvent(e, link.path, () =>
+                      setIsMobileMenuOpen(false),
+                    )
+                  }
                   data-testid={`link-mobile-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
                 >
                   {link.label}
