@@ -10,6 +10,8 @@ import Home from "@/pages/home";
 import Lots from "@/pages/lots";
 import Availability from "@/pages/availability";
 import Progress from "@/pages/progress";
+// fix B1: página de contacto independiente — ya no comparte componente con /lotes
+import Contact from "@/pages/contact";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -18,7 +20,8 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/lotes" component={Lots} />
       <Route path="/disponibilidad" component={Availability} />
-      <Route path="/contacto" component={Lots} />
+      {/* fix B1: /contacto ahora tiene su propio componente */}
+      <Route path="/contacto" component={Contact} />
       <Route path="/avance" component={Progress} />
       <Route component={NotFound} />
     </Switch>
