@@ -5,15 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import lotsHeroImage from "/lotesdips.avif";
 import { LOTS, type Lot, type LotStatus } from "@/data/lots";
-// fix Q1: usar hook compartido en lugar de useLocation + handleNavClick duplicado
 import { useNavigation } from "@/hooks/use-navigation";
 
-// ── Helpers de UI ────────────────────────────────────────────────────────────
-
 const STATUS_CONFIG: Record<LotStatus, { label: string; badgeClass: string; dotClass: string }> = {
-  available: { label: "Disponible",     badgeClass: "bg-green-100 text-green-800", dotClass: "bg-green-500" },
-  reserved:  { label: "Reservado",      badgeClass: "bg-red-100 text-red-800",     dotClass: "bg-red-500"   },
-  sold:      { label: "No Disponible",  badgeClass: "bg-gray-100 text-gray-800",   dotClass: "bg-gray-500"  },
+  available: { label: "Disponible",    badgeClass: "bg-green-100 text-green-800", dotClass: "bg-green-500" },
+  reserved:  { label: "Reservado",     badgeClass: "bg-red-100 text-red-800",     dotClass: "bg-red-500"   },
+  sold:      { label: "No Disponible", badgeClass: "bg-gray-100 text-gray-800",   dotClass: "bg-gray-500"  },
 };
 
 type FilterStatus = LotStatus | "all";
@@ -25,17 +22,14 @@ const FILTER_OPTIONS: { value: FilterStatus; label: string }[] = [
   { value: "sold",      label: "No Disponibles" },
 ];
 
-// ── Componente ───────────────────────────────────────────────────────────────
-
 export default function Availability() {
   const [selectedLot, setSelectedLot] = useState<Lot | null>(null);
   const [zoomedIn, setZoomedIn]       = useState(false);
   const [filter, setFilter]           = useState<FilterStatus>("all");
 
-  // fix Q1: hook compartido — elimina el handleNavClick duplicado local
-  const { handleNavClickEvent } = useNavigation();
+  // S2-U1: navigateToContact pasa el lote como query param → ContactForm lo pre-llena
+  const { navigateToContact } = useNavigation();
 
-  // fix Q2: datos vienen del archivo de datos, no del componente
   const filteredLots = useMemo(
     () => filter === "all" ? LOTS : LOTS.filter((l) => l.status === filter),
     [filter],
@@ -43,7 +37,6 @@ export default function Availability() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero */}
       <section
         className="relative h-[40vh] min-h-[300px] flex items-center justify-center"
         style={{
@@ -62,12 +55,10 @@ export default function Availability() {
         </div>
       </section>
 
-      {/* Main */}
       <section className="py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            {/* Plano */}
             <div className="lg:col-span-2">
               <Card className="overflow-hidden">
                 <CardHeader>
@@ -99,9 +90,7 @@ export default function Availability() {
               </Card>
             </div>
 
-            {/* Lista de lotes */}
             <div className="lg:col-span-1 space-y-4">
-              {/* Leyenda */}
               <div>
                 <h2 className="text-2xl font-semibold mb-3">Detalles de Lotes</h2>
                 <div className="flex flex-wrap gap-3 mb-4">
@@ -115,7 +104,6 @@ export default function Availability() {
                   )}
                 </div>
 
-                {/* Filtros */}
                 <div className="flex flex-wrap gap-2 mb-4" role="group" aria-label="Filtrar lotes por estado">
                   {FILTER_OPTIONS.map((opt) => (
                     <Button
@@ -135,7 +123,6 @@ export default function Availability() {
                 </p>
               </div>
 
-              {/* Cards de lotes */}
               <div className="max-h-[600px] overflow-y-auto space-y-3 pr-1">
                 {filteredLots.map((lot) => {
                   const cfg = STATUS_CONFIG[lot.status];
@@ -172,10 +159,11 @@ export default function Availability() {
                             data-testid={`btn-interested-${lot.id}`}
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleNavClickEvent(e, "/contacto");
+                              // S2-U1: pasa el número de lote → ContactForm pre-llena el mensaje
+                              navigateToContact(lot.number);
                             }}
                           >
-                            Interesado
+                            Me interesa este lote
                           </Button>
                         )}
                       </CardContent>
