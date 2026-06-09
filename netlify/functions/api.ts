@@ -3,9 +3,19 @@
  *
  * Adapter Express -> Netlify Function via serverless-http.
  *
- * Fix: top-level await no es compatible con el bundler CJS de Netlify Functions.
- * Solucion: registerRoutes es sincrono en la practica — el await era innecesario.
- * Se usa un handler lazy que inicializa la app una sola vez (patron singleton).
+ * Problema que resuelve este archivo:
+ *
+ * Netlify convierte /api/message -> /.netlify/functions/api/message
+ * serverless-http pasa el path a Express como /message (sin /api/)
+ * pero las rutas en Express estaban registradas como /api/message -> 404
+ *
+ * Solucion: montar el router de rutas en "/" dentro de la funcion,
+ * y registrar las rutas sin el prefijo /api/ en routes.ts.
+ * El prefijo /api lo maneja el redirect de netlify.toml, no Express.
+ *
+ * Race condition fix: registerRoutes es llamado con await real dentro
+ * de un IIFE async, y el handler espera a que la inicializacion termine
+ * antes de procesar cualquier request.
  */
 
 import serverless from "serverless-http";
@@ -17,23 +27,19 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// registerRoutes retorna Promise<Server> pero solo registra middleware —
-// no necesitamos el Server en contexto serverless, ni await real.
-// Lo resolvemos con un handler que inicializa de forma lazy y segura.
-let initialized = false;
-
-const initApp = () => {
-  if (!initialized) {
-    registerRoutes(app).catch((err) => {
-      console.error("Error initializing routes:", err);
-    });
-    initialized = true;
-  }
-};
+// Promesa de inicializacion — garantiza que las rutas esten registradas
+// antes de que llegue cualquier request. Elimina la race condition del
+// patron lazy anterior.
+const ready = registerRoutes(app).then(() => {
+  // registerRoutes retorna Server — no lo necesitamos en serverless
+}).catch((err) => {
+  console.error("[netlify/api] Error registrando rutas:", err);
+});
 
 const serverlessHandler = serverless(app);
 
 export const handler: Handler = async (event, context) => {
-  initApp();
+  // Esperar inicializacion antes de procesar el request
+  await ready;
   return serverlessHandler(event, context) as ReturnType<Handler>;
 };

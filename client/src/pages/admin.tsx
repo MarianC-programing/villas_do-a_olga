@@ -1,22 +1,20 @@
 /**
  * pages/admin.tsx
  *
- * Panel de administracion para ver los mensajes del formulario de contacto.
- * Protegido por ADMIN_TOKEN — solo accesible con el token correcto.
+ * Panel de administracion para ver los mensajes del formulario.
+ * Protegido por ADMIN_TOKEN.
  *
- * Ruta: /admin (agregada en App.tsx)
  * Acceso: /admin?token=TU_ADMIN_TOKEN
  *
- * Por que query param y no login form:
- *   - El sitio no tiene sistema de usuarios para admins
- *   - El token en la URL es suficiente para uso interno/personal
- *   - Se puede mejorar a Basic Auth en el futuro si escala
+ * Usa /api/submissions en lugar de /api/contact-submissions
+ * para evitar bloqueo de ad-blockers.
  */
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Mail, Phone, MessageSquare, Calendar, ShieldAlert } from "lucide-react";
+import { API } from "@/lib/api";
 
 interface ContactSubmission {
   id: string;
@@ -62,7 +60,7 @@ export default function Admin() {
       return;
     }
 
-    fetch("/api/contact-submissions", {
+    fetch(API.submissions, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json() as Promise<ApiResponse>)
@@ -105,7 +103,7 @@ export default function Admin() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Panel de Mensajes</h1>
-            <p className="text-muted-foreground mt-1">Villas Dona Olga — Formulario de Contacto</p>
+            <p className="text-muted-foreground mt-1">Villas Dona Olga</p>
           </div>
           <Badge variant="outline" className="text-sm">
             {submissions.length} mensaje{submissions.length !== 1 ? "s" : ""}
@@ -132,18 +130,14 @@ export default function Admin() {
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
-                    <a
-                      href={`mailto:${sub.email}`}
-                      className="flex items-center gap-1.5 hover:text-foreground transition-colors"
-                    >
+                    <a href={`mailto:${sub.email}`}
+                      className="flex items-center gap-1.5 hover:text-foreground transition-colors">
                       <Mail className="h-4 w-4" />
                       {sub.email}
                     </a>
                     {sub.phone && (
-                      <a
-                        href={`tel:${sub.phone}`}
-                        className="flex items-center gap-1.5 hover:text-foreground transition-colors"
-                      >
+                      <a href={`tel:${sub.phone}`}
+                        className="flex items-center gap-1.5 hover:text-foreground transition-colors">
                         <Phone className="h-4 w-4" />
                         {sub.phone}
                       </a>
@@ -157,7 +151,6 @@ export default function Admin() {
             ))}
           </div>
         )}
-
       </div>
     </div>
   );
