@@ -7,7 +7,6 @@
   NODE_VERSION = "24"
   PNPM_VERSION = "11"
 
-# SPA fallback — sin esto, refrescar en /disponibilidad o /contacto da 404
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
@@ -18,7 +17,7 @@
   to = "/index.html"
   status = 200
 
-[headers]
+[[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
@@ -26,7 +25,6 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# Cache agresivo para assets con hash (Vite los genera con hash en el nombre)
 [[headers]]
   for = "/assets/*"
   [headers.values]
