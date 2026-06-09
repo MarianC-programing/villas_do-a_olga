@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -10,9 +10,12 @@ import Home from "@/pages/home";
 import Lots from "@/pages/lots";
 import Availability from "@/pages/availability";
 import Progress from "@/pages/progress";
-// fix B1: página de contacto independiente — ya no comparte componente con /lotes
 import Contact from "@/pages/contact";
+import Admin from "@/pages/admin";
 import NotFound from "@/pages/not-found";
+
+// /admin no muestra el Header ni Footer — es una vista interna
+const ADMIN_ROUTES = ["/admin"];
 
 function Router() {
   return (
@@ -20,25 +23,28 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/lotes" component={Lots} />
       <Route path="/disponibilidad" component={Availability} />
-      {/* fix B1: /contacto ahora tiene su propio componente */}
       <Route path="/contacto" component={Contact} />
       <Route path="/avance" component={Progress} />
+      <Route path="/admin" component={Admin} />
       <Route component={NotFound} />
     </Switch>
   );
 }
 
 function App() {
+  const [location] = useLocation();
+  const isAdminRoute = ADMIN_ROUTES.some((r) => location.startsWith(r));
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <TooltipProvider>
           <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-1 pt-16 md:pt-20">
+            {!isAdminRoute && <Header />}
+            <main className={`flex-1 ${!isAdminRoute ? "pt-16 md:pt-20" : ""}`}>
               <Router />
             </main>
-            <Footer />
+            {!isAdminRoute && <Footer />}
           </div>
           <Toaster />
         </TooltipProvider>
