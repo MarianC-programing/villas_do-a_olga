@@ -7,9 +7,6 @@ import path from "node:path";
 
 neonConfig.webSocketConstructor = ws;
 
-// S2-B3: tipos explícitos — elimina 'any' en db y pool.
-// En desarrollo sin DATABASE_URL, db y pool son undefined de forma tipada.
-// storage.ts elige la implementación correcta basándose en hasDatabase.
 type AppDb = NeonDatabase<typeof schema>;
 type AppPool = Pool;
 
@@ -17,8 +14,16 @@ let pool: AppPool | undefined;
 let db: AppDb | undefined;
 let hasDatabase = false;
 
-if (process.env.DATABASE_URL) {
-  pool = new Pool({ connectionString: process.env.DATABASE_URL });
+// Neon crea automaticamente NETLIFY_DATABASE_URL en Netlify cuando conectas la BD.
+// En local usamos DATABASE_URL del .env.
+// Fallback chain: DATABASE_URL -> NETLIFY_DATABASE_URL -> SQLite -> Memory
+const connectionString =
+  process.env.DATABASE_URL ??
+  process.env.NETLIFY_DATABASE_URL ??
+  undefined;
+
+if (connectionString) {
+  pool = new Pool({ connectionString });
   db = drizzle({ client: pool, schema });
   hasDatabase = true;
 } else {
@@ -26,13 +31,9 @@ if (process.env.DATABASE_URL) {
     process.env.SQLITE_FILE || path.resolve(process.cwd(), "dev.sqlite");
 
   if (fs.existsSync(sqliteFile)) {
-    console.warn(
-      `DATABASE_URL no configurado — usando SQLite local: ${sqliteFile}`,
-    );
+    console.warn(`Sin DATABASE_URL — usando SQLite local: ${sqliteFile}`);
   } else {
-    console.warn(
-      "DATABASE_URL no configurado — usando almacenamiento en memoria (solo desarrollo).",
-    );
+    console.warn("Sin DATABASE_URL — usando almacenamiento en memoria (solo desarrollo).");
   }
 }
 

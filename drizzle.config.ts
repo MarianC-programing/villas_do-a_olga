@@ -1,14 +1,17 @@
 import { defineConfig } from "drizzle-kit";
 
-const databaseUrl = process.env.DATABASE_URL || "file:dev.sqlite";
+const connectionString =
+  process.env.DATABASE_URL ??
+  process.env.NETLIFY_DATABASE_URL ??
+  "file:dev.sqlite";
+
+const isPostgres = connectionString.startsWith("postgresql") || connectionString.startsWith("postgres");
 
 export default defineConfig({
   out: "./migrations",
   schema: "./shared/schema.ts",
-  dialect: process.env.DATABASE_URL ? "postgresql" : "sqlite",
-  dbCredentials: process.env.DATABASE_URL ? {
-    url: process.env.DATABASE_URL,
-  } : {
-    url: databaseUrl,
-  },
+  dialect: isPostgres ? "postgresql" : "sqlite",
+  dbCredentials: isPostgres
+    ? { url: connectionString }
+    : { url: connectionString },
 });
