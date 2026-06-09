@@ -1,8 +1,9 @@
 /**
  * components/contact-form.tsx
  *
- * S2-U1: Lee ?lote= de la URL para pre-llenar el mensaje cuando el usuario
- * llega desde el botón "Me interesa este lote" en /disponibilidad.
+ * Formulario de contacto conectado a POST /api/message.
+ * Endpoint renombrado de /api/contact para evitar bloqueo de ad-blockers.
+ * S2-U1: acepta preselectedLot para pre-llenar el mensaje.
  */
 
 import { useForm } from "react-hook-form";
@@ -13,26 +14,27 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Send } from "lucide-react";
+import { API } from "@/lib/api";
 
 const contactSchema = z.object({
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres").max(100),
-  email: z.string().email("Ingresa un correo electrónico válido"),
+  email: z.string().email("Ingresa un correo electronico valido"),
   phone: z
     .string()
-    .regex(/^[\d\s\-\+\(\)]*$/, "Solo se permiten números y caracteres +()-")
+    .regex(/^[\d\s\-\+\(\)]*$/, "Solo se permiten numeros y caracteres +()-")
     .max(20)
     .optional()
     .or(z.literal("")),
   message: z
     .string()
     .min(10, "El mensaje debe tener al menos 10 caracteres")
-    .max(1000, "Máximo 1000 caracteres"),
+    .max(1000, "Maximo 1000 caracteres"),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
 
-async function submitContact(data: ContactFormData): Promise<{ success: boolean; message: string }> {
-  const response = await fetch("/api/contact", {
+async function submitMessage(data: ContactFormData): Promise<{ success: boolean; message: string }> {
+  const response = await fetch(API.message, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -47,11 +49,11 @@ interface ContactFormProps {
   title?: string;
 }
 
-export function ContactForm({ preselectedLot, title = "Envíanos un Mensaje" }: ContactFormProps) {
+export function ContactForm({ preselectedLot, title = "Envianos un Mensaje" }: ContactFormProps) {
   const { toast } = useToast();
 
   const defaultMessage = preselectedLot
-    ? `Hola, estoy interesado en el Lote ${preselectedLot}. ¿Podrían darme más información sobre precio y disponibilidad?`
+    ? `Hola, estoy interesado en el Lote ${preselectedLot}. Podrian darme mas informacion sobre precio y disponibilidad?`
     : "";
 
   const {
@@ -68,9 +70,9 @@ export function ContactForm({ preselectedLot, title = "Envíanos un Mensaje" }: 
   const messageLength = watch("message")?.length ?? 0;
 
   const mutation = useMutation({
-    mutationFn: submitContact,
+    mutationFn: submitMessage,
     onSuccess: (data) => {
-      toast({ title: "¡Mensaje enviado!", description: data.message });
+      toast({ title: "Mensaje enviado!", description: data.message });
       reset();
     },
     onError: (error: Error) => {
@@ -107,7 +109,7 @@ export function ContactForm({ preselectedLot, title = "Envíanos un Mensaje" }: 
               Nombre completo <span className="text-destructive">*</span>
             </label>
             <input id="contact-name" type="text" autoComplete="name"
-              placeholder="Ej: María González" data-testid="input-name"
+              placeholder="Ej: Maria Gonzalez" data-testid="input-name"
               className={inputClass(!!errors.name)} {...register("name")} />
             {errors.name && (
               <p className="text-xs text-destructive" role="alert" data-testid="error-name">
@@ -118,7 +120,7 @@ export function ContactForm({ preselectedLot, title = "Envíanos un Mensaje" }: 
 
           <div className="space-y-1.5">
             <label htmlFor="contact-email" className="text-sm font-medium">
-              Correo electrónico <span className="text-destructive">*</span>
+              Correo electronico <span className="text-destructive">*</span>
             </label>
             <input id="contact-email" type="email" autoComplete="email"
               placeholder="tu@correo.com" data-testid="input-email"
@@ -132,7 +134,7 @@ export function ContactForm({ preselectedLot, title = "Envíanos un Mensaje" }: 
 
           <div className="space-y-1.5">
             <label htmlFor="contact-phone" className="text-sm font-medium">
-              Teléfono <span className="text-muted-foreground font-normal">(opcional)</span>
+              Telefono <span className="text-muted-foreground font-normal">(opcional)</span>
             </label>
             <input id="contact-phone" type="tel" autoComplete="tel"
               placeholder="+507 6000-0000" data-testid="input-phone"
@@ -149,7 +151,7 @@ export function ContactForm({ preselectedLot, title = "Envíanos un Mensaje" }: 
               Mensaje <span className="text-destructive">*</span>
             </label>
             <textarea id="contact-message" rows={5}
-              placeholder="¿En qué lote estás interesado? ¿Tienes preguntas sobre financiamiento?"
+              placeholder="En que lote estas interesado? Tienes preguntas sobre financiamiento?"
               data-testid="input-message"
               className={`flex w-full rounded-md border bg-background px-3 py-2 text-sm
                 ring-offset-background placeholder:text-muted-foreground
