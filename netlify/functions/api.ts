@@ -1,23 +1,37 @@
 /**
  * netlify/functions/api.ts
  *
- * Handler directo de Netlify Functions — sin serverless-http ni Express.
+ * Handler directo para Netlify Functions.
  *
- * Por que eliminar serverless-http:
- * - serverless-http con Netlify Functions v2 pasa rawPath sin prefijo /api/
- * - Genera conflictos de doble parsing de body con express.json()
- * - Agrega una capa de abstraccion innecesaria para solo 2 endpoints
- *
- * Arquitectura:
- * - Netlify event -> parse manual -> validacion Zod -> Neon directamente
- * - Sin Express, sin serverless-http, sin race conditions
- * - La logica de negocio (validacion, storage) se reutiliza desde server/
+ * Usa DatabaseStorage directamente (Neon PostgreSQL).
+ * No importa storage.ts completo para evitar que better-sqlite3
+ * (modulo nativo de C++) entre en el bundle de la funcion.
  */
 
 import type { Handler, HandlerEvent, HandlerResponse } from "@netlify/functions";
 import { ZodError } from "zod";
-import { storage } from "../../server/storage.js";
+import { Pool, neonConfig } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-serverless";
+import ws from "ws";
+import { contactSubmissions } from "../../shared/schema.js";
 import { insertContactSubmissionSchema } from "../../shared/schema.js";
+import { desc } from "drizzle-orm";
+
+// Neon requiere WebSocket en Node.js
+neonConfig.webSocketConstructor = ws;
+
+// Conexion a Neon — usa NETLIFY_DATABASE_URL (creada por la extension de Neon)
+// o DATABASE_URL si se configura manualmente
+const connectionString =
+  process.env.DATABASE_URL ??
+  process.env.NETLIFY_DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error("DATABASE_URL o NETLIFY_DATABASE_URL requerida");
+}
+
+const pool = new Pool({ connectionString });
+const db = drizzle({ client: pool });
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -48,11 +62,10 @@ function formatZodErrors(error: ZodError): Record<string, string> {
   );
 }
 
-// ── Handlers por ruta ────────────────────────────────────────────────────────
+// ── Handlers ─────────────────────────────────────────────────────────────────
 
 async function handleMessage(event: HandlerEvent): Promise<HandlerResponse> {
   if (event.httpMethod === "OPTIONS") return json(200, {});
-
   if (event.httpMethod !== "POST") {
     return json(405, { success: false, message: "Metodo no permitido." });
   }
@@ -60,7 +73,12 @@ async function handleMessage(event: HandlerEvent): Promise<HandlerResponse> {
   try {
     const body = parseBody(event);
     const validatedData = insertContactSubmissionSchema.parse(body);
-    const submission = await storage.createContactSubmission(validatedData);
+
+    const [submission] = await db
+      .insert(contactSubmissions)
+      .values(validatedData)
+      .returning();
+
     return json(201, {
       success: true,
       message: "Mensaje recibido. Nos pondremos en contacto pronto.",
@@ -84,7 +102,6 @@ async function handleMessage(event: HandlerEvent): Promise<HandlerResponse> {
 
 async function handleSubmissions(event: HandlerEvent): Promise<HandlerResponse> {
   if (event.httpMethod === "OPTIONS") return json(200, {});
-
   if (event.httpMethod !== "GET") {
     return json(405, { success: false, message: "Metodo no permitido." });
   }
@@ -94,7 +111,10 @@ async function handleSubmissions(event: HandlerEvent): Promise<HandlerResponse> 
     return json(503, { success: false, message: "ADMIN_TOKEN no configurado." });
   }
 
-  const authHeader = event.headers?.authorization ?? event.headers?.Authorization ?? "";
+  const authHeader =
+    event.headers?.authorization ??
+    event.headers?.Authorization ??
+    "";
   const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
 
   if (token !== adminToken) {
@@ -102,31 +122,33 @@ async function handleSubmissions(event: HandlerEvent): Promise<HandlerResponse> 
   }
 
   try {
-    const submissions = await storage.getAllContactSubmissions();
-    return json(200, { success: true, data: submissions, count: submissions.length });
+    const submissions = await db
+      .select()
+      .from(contactSubmissions)
+      .orderBy(desc(contactSubmissions.createdAt));
+
+    return json(200, {
+      success: true,
+      data: submissions,
+      count: submissions.length,
+    });
   } catch (error) {
     console.error("[api/submissions] Error:", error);
     return json(500, { success: false, message: "Error al obtener los mensajes." });
   }
 }
 
-// ── Router principal ─────────────────────────────────────────────────────────
+// ── Router ────────────────────────────────────────────────────────────────────
 
 export const handler: Handler = async (event) => {
-  // Netlify pasa el path original completo en event.path
-  // /api/message -> path = "/api/message"
-  // /api/submissions -> path = "/api/submissions"
   const path = event.path ?? "";
-
   console.log(`[API] ${event.httpMethod} ${path}`);
 
-  if (path.endsWith("/message")) {
-    return handleMessage(event);
-  }
+  if (path.endsWith("/message")) return handleMessage(event);
+  if (path.endsWith("/submissions")) return handleSubmissions(event);
 
-  if (path.endsWith("/submissions")) {
-    return handleSubmissions(event);
-  }
-
-  return json(404, { success: false, message: `Ruta no encontrada: ${path}` });
+  return json(404, {
+    success: false,
+    message: `Ruta no encontrada: ${path}`,
+  });
 };
