@@ -1,12 +1,11 @@
 [build]
   command = "pnpm run build"
-  publish = "dist/public"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "24"
   PNPM_VERSION = "11"
 
-# SPA fallback — cualquier ruta sirve index.html (Wouter maneja el routing)
 [[redirects]]
   from = "/*"
   to = "/index.html"
