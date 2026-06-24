@@ -16,14 +16,14 @@ interface ProjectImage {
 const PROJECT_IMAGES: ProjectImage[] = [
   {
     id: 1,
-    url: "/Progress_img/fase inicial.JPG",
+    url: "/Progress_img/fase inicial.jpg",
     title: "Inicio de Construcción",
     description: "Preparación del terreno y cimientos principales",
     date: "Noviembre 2025",
   },
   {
     id: 2,
-    url: "/Progress_img/Calle Noviembre 2025.PNG",
+    url: "/Progress_img/Calle Noviembre 2025.jpg",
     title: "Pavimentación de Calles",
     description: "Construcción de accesos principales",
     date: "18 Noviembre 2025",
