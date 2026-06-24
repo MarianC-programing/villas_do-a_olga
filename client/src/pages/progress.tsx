@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import lotsHeroImage from "/pogrss.jpg";
+const lotsHeroImage = "/pogrss.jpg";
 
 interface ProjectImage {
   id: number;
@@ -114,14 +114,14 @@ export default function ProjectProgress() {
                       role="tablist"
                       aria-label="Indicadores de imagen"
                     >
-                      {images.map((img, index) => (
+                      {images.map((img) => (
                         <button
                           key={index}
                           role="tab"
                           aria-selected={index === currentIndex}
                           aria-label={`Ir a: ${img.title}`}
                           className={`h-2 rounded-full transition-all ${
-                            index === currentIndex
+                            img.id === images[currentIndex].id
                               ? "w-8 bg-primary"
                               : "w-2 bg-white/50 hover:bg-white"
                           }`}

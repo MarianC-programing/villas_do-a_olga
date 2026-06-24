@@ -1,15 +1,3 @@
-/**
- * components/contact-form.tsx
- *
- * Simplificado: reemplaza el formulario por links directos.
- * Sin backend, sin Netlify Functions, sin posibilidad de error.
- *
- * Por que este cambio:
- * - El formulario requeria Netlify Functions con bundle complejo
- * - Los ad-blockers bloqueaban /api/contact y /api/message
- * - WhatsApp y email directos son mas efectivos para el cliente
- */
-
 import { Phone, Mail, MessageCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -21,15 +9,16 @@ const ICON_MAP = {
   whatsapp: MessageCircle,
 };
 
+// Readonly props — inmutables por contrato (SonarCloud S6534)
 interface ContactFormProps {
-  preselectedLot?: string;
-  title?: string;
+  readonly preselectedLot?: string;
+  readonly title?: string;
 }
 
-export function ContactForm({ preselectedLot, title = "Contactanos" }: ContactFormProps) {
+export function ContactForm({ preselectedLot, title = "Contáctanos" }: ContactFormProps) {
   const whatsappMessage = preselectedLot
-    ? `Hola, estoy interesado en el Lote ${preselectedLot} de Villas Dona Olga.`
-    : "Hola, me gustaria obtener informacion sobre los lotes de Villas Dona Olga.";
+    ? `Hola, estoy interesado en el Lote ${preselectedLot} de Villas Doña Olga.`
+    : "Hola, me gustaría obtener información sobre los lotes de Villas Doña Olga.";
 
   return (
     <Card>
@@ -44,7 +33,7 @@ export function ContactForm({ preselectedLot, title = "Contactanos" }: ContactFo
       </CardHeader>
       <CardContent className="space-y-4">
         <p className="text-muted-foreground text-sm">
-          Elige tu metodo preferido para comunicarte con nosotros:
+          Elige tu método preferido para comunicarte con nosotros:
         </p>
 
         {CONTACT_METHODS.map((method) => {

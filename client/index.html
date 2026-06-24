@@ -4,14 +4,16 @@
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-E6YF690M3R"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      /* globalThis en lugar de window — compatibilidad ES2020 (SonarCloud S6421) */
+      globalThis.dataLayer = globalThis.dataLayer || [];
+      function gtag(){globalThis.dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-E6YF690M3R');
     </script>
 
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <!-- maximum-scale=5 en lugar de 1 — permite zoom de accesibilidad (SonarCloud S5721) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
 
     <!-- SEO -->
     <meta name="description" content="Villas Doña Olga - Lotes exclusivos con financiamiento directo. Precio competitivo $60/m², financiamiento flexible, servicios incluidos. Construye tu futuro en un entorno natural y tranquilo." />
@@ -26,9 +28,6 @@
     <title>Villas Doña Olga - Venta de Lotes Residenciales</title>
     <link rel="icon" type="image/svg+xml" href="/Logo-villas.svg" />
 
-    <!-- S2-P1: Solo Open Sans — eliminadas 28 familias innecesarias.
-         Georgia y Menlo son fuentes del sistema operativo, no requieren carga.
-         Impacto: ~800KB menos de requests de fuentes en el primer render. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

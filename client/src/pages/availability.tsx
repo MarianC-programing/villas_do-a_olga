@@ -3,9 +3,11 @@ import { MapPin, Maximize2, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import lotsHeroImage from "/lotesdips.avif";
 import { LOTS, type Lot, type LotStatus } from "@/data/lots";
 import { useNavigation } from "@/hooks/use-navigation";
+
+// Constantes de imagen desde public/ — no se importan con ES modules (SonarCloud S2440)
+const lotsHeroImage = "/lotesdips.avif";
 
 const STATUS_CONFIG: Record<LotStatus, { label: string; badgeClass: string; dotClass: string }> = {
   available: { label: "Disponible",    badgeClass: "bg-green-100 text-green-800", dotClass: "bg-green-500" },
@@ -26,9 +28,7 @@ export default function Availability() {
   const [selectedLot, setSelectedLot] = useState<Lot | null>(null);
   const [zoomedIn, setZoomedIn]       = useState(false);
   const [filter, setFilter]           = useState<FilterStatus>("all");
-
-  // S2-U1: navigateToContact pasa el lote como query param → ContactForm lo pre-llena
-  const { navigateToContact } = useNavigation();
+  const { navigateToContact }         = useNavigation();
 
   const filteredLots = useMemo(
     () => filter === "all" ? LOTS : LOTS.filter((l) => l.status === filter),
@@ -93,6 +93,7 @@ export default function Availability() {
             <div className="lg:col-span-1 space-y-4">
               <div>
                 <h2 className="text-2xl font-semibold mb-3">Detalles de Lotes</h2>
+
                 <div className="flex flex-wrap gap-3 mb-4">
                   {(Object.entries(STATUS_CONFIG) as [LotStatus, typeof STATUS_CONFIG[LotStatus]][]).map(
                     ([status, cfg]) => (
@@ -104,7 +105,9 @@ export default function Availability() {
                   )}
                 </div>
 
-                <div className="flex flex-wrap gap-2 mb-4" role="group" aria-label="Filtrar lotes por estado">
+                {/* fieldset + legend en lugar de div + role="group" — semántica HTML nativa (SonarCloud S1085) */}
+                <fieldset className="flex flex-wrap gap-2 mb-4 border-0 p-0 m-0">
+                  <legend className="sr-only">Filtrar lotes por estado</legend>
                   {FILTER_OPTIONS.map((opt) => (
                     <Button
                       key={opt.value}
@@ -116,7 +119,7 @@ export default function Availability() {
                       {opt.label}
                     </Button>
                   ))}
-                </div>
+                </fieldset>
 
                 <p className="text-sm text-muted-foreground">
                   Mostrando {filteredLots.length} de {LOTS.length} lotes
@@ -159,7 +162,6 @@ export default function Availability() {
                             data-testid={`btn-interested-${lot.id}`}
                             onClick={(e) => {
                               e.stopPropagation();
-                              // S2-U1: pasa el número de lote → ContactForm pre-llena el mensaje
                               navigateToContact(lot.number);
                             }}
                           >

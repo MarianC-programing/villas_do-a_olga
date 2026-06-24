@@ -1,24 +1,17 @@
-/**
- * pages/contact.tsx
- * S2-U1: Lee ?lote= del query string para pre-llenar el formulario.
- * S2-P2: Datos de contacto importados de data/contact.ts (DRY).
- */
-
 import { Phone, Mail, MessageCircle, MapPin, Clock } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ContactForm } from "@/components/contact-form";
 import { CONTACT_METHODS, BUSINESS_HOURS, LOCATION } from "@/data/contact";
 
-// S2-U1: leer query params sin librería extra — URL nativa del navegador
+// globalThis en lugar de window — ES2020, compatible SSR (SonarCloud S6421)
 function useQueryParam(key: string): string | null {
-  if (typeof window === "undefined") return null;
-  return new URLSearchParams(window.location.search).get(key);
+  if (typeof globalThis.window === "undefined") return null;
+  return new URLSearchParams(globalThis.window.location.search).get(key);
 }
 
 const ICON_MAP = { phone: Phone, email: Mail, whatsapp: MessageCircle };
 
 export default function Contact() {
-  // S2-U1: si viene de /disponibilidad?lote=LR+C12, pre-llena el formulario
   const preselectedLot = useQueryParam("lote");
 
   return (
@@ -45,7 +38,6 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
 
-            {/* Columna izquierda — info */}
             <div className="space-y-5">
               <h2 className="text-2xl font-semibold">Información de Contacto</h2>
 
@@ -76,7 +68,6 @@ export default function Contact() {
                 );
               })}
 
-              {/* Horario */}
               <Card>
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
@@ -94,7 +85,6 @@ export default function Contact() {
                 </CardContent>
               </Card>
 
-              {/* Mapa */}
               <a href={LOCATION.mapsUrl} target="_blank" rel="noopener noreferrer" data-testid="link-location">
                 <Card className="hover-elevate transition-all duration-300 cursor-pointer">
                   <CardContent className="p-6">
@@ -133,11 +123,9 @@ export default function Contact() {
               </Card>
             </div>
 
-            {/* Columna derecha — formulario */}
-            {/* S2-U1: preselectedLot pre-llena el mensaje si viene de disponibilidad */}
             <div>
               <ContactForm
-                title="Envíanos un Mensaje"
+                title="Contáctanos"
                 preselectedLot={preselectedLot ?? undefined}
               />
             </div>

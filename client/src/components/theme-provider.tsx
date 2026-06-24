@@ -1,10 +1,11 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 type Theme = "light" | "dark";
 
+// Readonly props — inmutables por contrato (SonarCloud S6534)
 type ThemeProviderProps = {
-  children: React.ReactNode;
-  defaultTheme?: Theme;
+  readonly children: React.ReactNode;
+  readonly defaultTheme?: Theme;
 };
 
 type ThemeContextType = {
@@ -15,10 +16,7 @@ type ThemeContextType = {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ThemeProvider({
-  children,
-  defaultTheme = "light",
-}: ThemeProviderProps) {
+export function ThemeProvider({ children, defaultTheme = "light" }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
     const stored = localStorage.getItem("theme");
     return (stored as Theme) || defaultTheme;
@@ -35,8 +33,15 @@ export function ThemeProvider({
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
+  // useMemo evita que el objeto cambie en cada render y genere re-renders innecesarios
+  // en todos los consumidores del context (SonarCloud S6481)
+  const contextValue = useMemo(
+    () => ({ theme, setTheme, toggleTheme }),
+    [theme],
+  );
+
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
+    <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   );
