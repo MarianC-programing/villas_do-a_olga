@@ -30,7 +30,6 @@ const benefits = [
 ];
 
 export default function Home() {
-  // fix Q1: usar hook compartido en lugar de handleNavClick duplicado
   const { handleNavClick } = useNavigation();
 
   return (
@@ -73,9 +72,10 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            {/* fix(B-QA01): index no estaba en el callback de .map() — ReferenceError en runtime */}
             {benefits.map((benefit, index) => (
               <Card
-                key={index}
+                key={benefit.title}
                 className="overflow-hidden hover-elevate transition-all duration-300"
                 data-testid={`card-benefit-${index}`}
               >
