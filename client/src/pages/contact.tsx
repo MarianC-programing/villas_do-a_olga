@@ -11,8 +11,8 @@ import { CONTACT_METHODS, BUSINESS_HOURS, LOCATION } from "@/data/contact";
 
 // S2-U1: leer query params sin librería extra — URL nativa del navegador
 function useQueryParam(key: string): string | null {
-  if (typeof window === "undefined") return null;
-  return new URLSearchParams(window.location.search).get(key);
+  if (typeof globalThis.window === "undefined") return null;
+  return new URLSearchParams(globalThis.window.location.search).get(key);
 }
 
 const ICON_MAP = { phone: Phone, email: Mail, whatsapp: MessageCircle };
