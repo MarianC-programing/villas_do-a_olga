@@ -22,8 +22,8 @@ const ICON_MAP = {
 };
 
 interface ContactFormProps {
-  preselectedLot?: string;
-  title?: string;
+  readonly preselectedLot?: string;
+  readonly title?: string;
 }
 
 export function ContactForm({ preselectedLot, title = "Contactanos" }: ContactFormProps) {
