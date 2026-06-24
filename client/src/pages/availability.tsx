@@ -70,7 +70,7 @@ export default function Availability() {
                 <CardContent className="p-0">
                   <div className={`relative bg-muted ${zoomedIn ? "p-4 overflow-auto max-h-[600px]" : ""}`}>
                     <img
-                      src="/Gemini_Generated_Image_91fpr591fpr591fp.jpeg"
+                      src="/ImagenPlano.png"
                       alt="Plano general del proyecto Villas Doña Olga"
                       width={1200}
                       height={900}
