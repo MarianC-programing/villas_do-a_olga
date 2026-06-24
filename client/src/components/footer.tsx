@@ -1,7 +1,7 @@
 import { Facebook, Instagram, Mail, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigation } from "@/hooks/use-navigation";
-import logoImage from "/Logo-villas.svg";
+const logoImage = "/Logo-villas.svg";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
