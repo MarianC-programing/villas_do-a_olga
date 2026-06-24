@@ -69,11 +69,11 @@ export default function Lots() {
               </CardHeader>
               <CardContent className="p-6">
                 <div className="space-y-4">
-                  {PRICING_DETAILS.map((detail, index) => (
+                  {PRICING_DETAILS.map((detail) => (
                     <div
-                      key={index}
+                      key={detail.label}
                       className="flex justify-between items-center py-3 border-b last:border-0"
-                      data-testid={`pricing-${index}`}
+                      data-testid={`pricing-${detail.label}`}
                     >
                       <span className="text-muted-foreground">{detail.label}</span>
                       <span className="font-semibold text-lg">{detail.value}</span>
@@ -90,8 +90,8 @@ export default function Lots() {
               </CardHeader>
               <CardContent className="p-6">
                 <div className="space-y-6">
-                  {SERVICES.map((service, index) => (
-                    <div key={index} className="flex items-start gap-4" data-testid={`service-${index}`}>
+                  {SERVICES.map((service) => (
+                    <div key={service.label} className="flex items-start gap-4" data-testid={`service-${service.label}`}>
                       <service.icon className="w-10 h-10 text-primary flex-shrink-0" />
                       <div>
                         <h4 className="font-semibold text-lg mb-1">{service.label}</h4>
