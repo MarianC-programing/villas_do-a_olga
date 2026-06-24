@@ -3,7 +3,7 @@ import { MapPin, Maximize2, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import lotsHeroImage from "/lotesdips.avif";
+const lotsHeroImage = "/lotesdips.avif";
 import { LOTS, type Lot, type LotStatus } from "@/data/lots";
 import { useNavigation } from "@/hooks/use-navigation";
 
@@ -104,7 +104,8 @@ export default function Availability() {
                   )}
                 </div>
 
-                <div className="flex flex-wrap gap-2 mb-4" role="group" aria-label="Filtrar lotes por estado">
+                <fieldset className="flex flex-wrap gap-2 mb-4 border-0 p-0 m-0">
+                  <legend className="sr-only">Filtrar lotes por estado</legend>
                   {FILTER_OPTIONS.map((opt) => (
                     <Button
                       key={opt.value}
@@ -116,7 +117,7 @@ export default function Availability() {
                       {opt.label}
                     </Button>
                   ))}
-                </div>
+                </fieldset>
 
                 <p className="text-sm text-muted-foreground">
                   Mostrando {filteredLots.length} de {LOTS.length} lotes

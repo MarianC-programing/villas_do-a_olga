@@ -73,11 +73,11 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {benefits.map((benefit, index) => (
+            {benefits.map((benefit) => (
               <Card
-                key={index}
+                key={benefit.title}
                 className="overflow-hidden hover-elevate transition-all duration-300"
-                data-testid={`card-benefit-${index}`}
+                data-testid={`card-benefit-${benefit.title}`}
               >
                 <CardContent className="p-6 md:p-8">
                   <div className="flex flex-col items-center text-center space-y-4">

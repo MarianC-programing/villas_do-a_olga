@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import lotsHeroImage from "/pogrss.jpg";
+const lotsHeroImage = "/pogrss.jpg";
 
 interface ProjectImage {
   id: number;
@@ -114,18 +114,18 @@ export default function ProjectProgress() {
                       role="tablist"
                       aria-label="Indicadores de imagen"
                     >
-                      {images.map((img, index) => (
+                      {images.map((img) => (
                         <button
-                          key={index}
+                          key={img.id}
                           role="tab"
-                          aria-selected={index === currentIndex}
+                          aria-selected={img.id === images[currentIndex].id}
                           aria-label={`Ir a: ${img.title}`}
                           className={`h-2 rounded-full transition-all ${
-                            index === currentIndex
+                            img.id === images[currentIndex].id
                               ? "w-8 bg-primary"
                               : "w-2 bg-white/50 hover:bg-white"
                           }`}
-                          onClick={() => setCurrentIndex(index)}
+                          onClick={() => setCurrentIndex(images.indexOf(img))}
                         />
                       ))}
                     </div>
@@ -157,9 +157,9 @@ export default function ProjectProgress() {
                   <Card
                     key={image.id}
                     className={`overflow-hidden cursor-pointer transition-all hover:shadow-lg ${
-                      index === currentIndex ? "ring-2 ring-primary" : ""
+                      image.id === images[currentIndex].id ? "ring-2 ring-primary" : ""
                     }`}
-                    onClick={() => setCurrentIndex(index)}
+                    onClick={() => setCurrentIndex(images.indexOf(image))}
                   >
                     <div className="relative aspect-square bg-muted overflow-hidden">
                       <img
