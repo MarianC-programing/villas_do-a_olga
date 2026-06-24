@@ -212,9 +212,10 @@
   /* .no-default-hover-elevate/no-default-active-elevate is an escape hatch so consumers of
    * buttons/badges can remove the automatic brightness adjustment on interactions
    * and program their own. */
-  .no-default-hover-elevate {}
-
-  .no-default-active-elevate {}
+  /* SC-07/08: escape hatches — these selectors exist intentionally so consumers
+   * can override hover/active elevation by adding the class. No rules needed. */
+  .no-default-hover-elevate,
+  .no-default-active-elevate { /* intentionally empty — selector acts as opt-out flag */ }
 
 
   /**
@@ -281,8 +282,7 @@
   .border.hover-elevate:not(.no-hover-interaction-elevate)::after,
   .border.active-elevate:not(.no-active-interaction-elevate)::after,
   .border.hover-elevate-2:not(.no-hover-interaction-elevate)::after,
-  .border.active-elevate-2:not(.no-active-interaction-elevate)::after,
-  .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
+  .border.active-elevate-2:not(.no-active-interaction-elevate)::after {
     inset: -1px;
   }
 }
